@@ -67,7 +67,9 @@ method.
 
 I got the javascript working by using someone else's repo that had
 everything set up already [here](https://github.com/baali/thrift_js).
-So, now I have everything set up to do communication.
+So, now I have everything set up to do communication. __The trick is to
+use the JSON protocol and the HttpServer Transport__ in your cpp
+server so that it is compatible with javascript.
 
 Man, I've had a fair amount of problems with linking. It might be a
 good idea to study these a little more in depth so I have a better
