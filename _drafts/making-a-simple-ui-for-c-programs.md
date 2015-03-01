@@ -50,3 +50,29 @@ seems powerful, but ill-suited to our sole purpose.
 * [Hessian](http://hessian.caucho.com/), which seems a little
 outdated, but purports to be optimized for performance.
 
+## Setting up Thrift
+
+I followed the straightforward approach [here](http://thrift.apache.org/).
+It got a little tricky when supporting libraries and tools weren't
+actually up to date. So I had to upgrade boost and go. Upgrading boost
+was easy when I used this great
+[tutorial](http://choorucode.com/2013/12/27/how-to-upgrade-the-boost-library-on-ubuntu/).
+You can view your boost version number by looking in
+`/usr/include/boost/version.hpp`. I actually had to redownload a newer
+version, and then make it. I then added paths to my LDFLAGS and
+CXXFLAGS in my `.bashrc` to allow the makefiles to work properly when
+creating the cpp support. I was able to get that working, but
+javascript support is running up agains an issue with an unsupported
+method.
+
+I got the javascript working by using someone else's repo that had
+everything set up already [here](https://github.com/baali/thrift_js).
+So, now I have everything set up to do communication.
+
+Man, I've had a fair amount of problems with linking. It might be a
+good idea to study these a little more in depth so I have a better
+understanding of how Linux takes care of all of these different
+things.
+
+
+
