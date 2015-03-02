@@ -76,5 +76,61 @@ good idea to study these a little more in depth so I have a better
 understanding of how Linux takes care of all of these different
 things.
 
+## Creating a Nice Makefile
+
+I've typically used
+[this](http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/) great
+tutorial on Makefiles to structure my own in a desirable format.
+Here are a couple more:
+
+* [Opussoftware
+ Tutorial](http://www.opussoftware.com/tutorial/TutMakefile.htm)
+* [Make User Guide](http://www.gnu.org/software/make/manual/make.html)
+* [JFranken Tutorial](http://www.jfranken.de/homepages/johannes/vortraege/make_inhalt.en.html#ToC12)
+* [Some Makefile Template](https://gist.github.com/yorickvP/3171926)
+
+I've found that my preference of Makefile design comes down to
+preventing mindless repetition while keeping things clear. I'm going
+to enumerate some of the things that I like to do in my Makefile, or
+that I've learned about Makefiles.
+
+* Makefiles are built around the idea of dependency rules
+  * `<Target>: <Sources>` Is the general format of dependency rules
+  * These execute recursively
+* If you want to print out a helpful message you can use $(ECHO)
+* To prevent make from printing out every line use `@` at the start of
+your command
+* `.PHONY: <name>` specifies that `<name>` is not a file
+* `CC=gcc` is an example of a Macro
+  * Macros are great, use them!
+  * To use them wrap `CC` with `$()` to get `$(CC)`
+* The from = to macro modifier is pretty handy it looks like:
+  * `SRCS = $(OBJS:.obj=.c)`
+  * You can use it to change file endings around
+* The path substitution macro modifier allows you to work with
+separate directories without using recursive Makefiles
+  * `OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))` is an example of putting
+an object file into the ODIR directory
+* Special Functions:
+  * `$(shell shellcmd)` runs shell command
+  * `$(notdir path/file.c) --> file.c`
+  * There's a whole lot more [where that came from](http://www.gnu.org/software/make/manual/make.html)
+* Special strings:
+  * `%` is an inference rule and can be used to infer file names, such as:
+    * `%.o: %.c`
+  * Automatic variables allow you to adapt infered rules
+    * `$@` = the target of the executing dependency rule
+    * `$<` = the first source
+    * `$?` = all sources newer than the target
+    * `$^` = set of all sources (no duplicates)
+    * `$+` = list of all sources (same order, and duplicates)
+
+This is a generic Makefile template that I created after looking
+around at a couple of different Makefiles.
+{% gist 2898342574038ec22a01 %}
+
+## Datatypes for This Project and Using them in Thrift
+
+## Control Flow between the cpp Server and the js Client
 
 
