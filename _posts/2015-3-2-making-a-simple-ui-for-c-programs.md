@@ -50,6 +50,8 @@ seems powerful, but ill-suited to our sole purpose.
 * [Hessian](http://hessian.caucho.com/), which seems a little
 outdated, but purports to be optimized for performance.
 
+I ended up deciding to use Thrift
+
 ## Setting up Thrift
 
 I followed the straightforward approach [here](http://thrift.apache.org/).
@@ -129,8 +131,8 @@ This is a generic Makefile template that I created after looking
 around at a couple of different Makefiles.
 {% gist 2898342574038ec22a01 %}
 
-## Datatypes for This Project and Using them in Thrift
-
-## Control Flow between the cpp Server and the js Client
-
+Well now everything is setup to communicate between a javascript
+frontend and a C / C++ backend! That's pretty awesome. I'm going to
+add an entry about actually building the Oscilloscope controller
+later.
 
