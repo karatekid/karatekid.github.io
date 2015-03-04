@@ -113,16 +113,18 @@ Acquisition Modes:
 * Single: Single buffer acquistion, can use trigger(default)
 * Record: Records for certain time
 * <div id="scan-shift">ScanShift:</div>
- * Ignores trigger
- * Acquires in FIFO style
- * Use FDwfAnalogInStatusSamplesValid to get number of acquired
- samples
- * When reaching bufferSize, waveform 'picture' is shifted for every
+ * Use FDwfAnalogInStatusSamplesValid to get number of acquired samples,
+ When reaching bufferSize, waveform 'picture' is shifted for every
  new sample
+ * This means that the oldest value is always at the front of the
+ buffer. This is probably more applicable than scan screen for our
+ applications. Every time that the JS queries for samples we'll just
+ send the most recently updated ScanShift buffer.
 * <div id="scan-screen">ScanScreen:</div>
- * Ignores the trigger
- * IndexWrite shows buffer write position
- * Think heart monitor display
+ * Both ScanScreen and ScanShift retreive data as a buffer of data
+ entries, but within ScanScreen, those values aren't sorted by
+ recency. In ScanScreen the most recently updated value is located at
+ the IndexWrite location.
 
 Main Difference between ScanScreen and ScanShift is that one writes a
 circular buffer, while the other looks like a shifting FIFO queue
@@ -204,7 +206,56 @@ TriggerSource settings:
 * Auto: set TriggerSource to `!trigsrcNone` and TriggerAutoTimeout to !0
 * Normal: set TriggerSource to `!trigsrcNone` and TriggerAutoTimeout to 0
 
+## C++ Server to communicate between JS GUI and DWF Library
 
+I first tried using ScanShift acquisition mode with the idea of
+sending the most recently updated buffer every time a request is made.
+This makes it seem like it may be convenient to use a thread to handle the consistent
+discovery polling actions, but we'll try it without first. Also, note
+that the dwf.h file declares some constants, which causes some nasty
+multiple definition errors when compiling, so be careful.
+
+## Throughput Testing`
+
+Enabling quick communication between the JS and C++ over Thrift was
+necessary to ensure a good UI on the frontend. Sam did a great job
+on the charting side of things and was able to create a chart of 5000
+data points in 15 ms, which is about 50X faster than Google Charts,
+which probably spends a fair amount of time making server queries and
+adding unecessary information. So, I focused on the Thrift
+communication to assess the bandwidth. Here is a chart I created from
+assessing the latency of several payloads of varying sizes:
+
+_Test Performed Using JSON Protocol and HttpServerTransport_
+
+![Transmission Time of Varied Payloads]({{site.url}}/images/making-oscope-ui/transmission-time-plot.png
+		"Transmission Time of Varied Payloads")
+
+The linear fit had parameters:
+
+```
+m = 9.277 * 10^-4 ms / Byte
+b = 13.325 ms
+```
+
+One strange thing I noticed was that at 128989 bytes, the
+transactions got ridiculously slow, like 9.155 S. I'm not really sure
+why it so precipitously declines at that precise point, but it seems
+like it would be interesting to look into. I can only assume that this
+could be some sort of paging issue, but that's just a guess.
+
+So, it looks like it would be quite worthwhile to attempt to optimize
+my payload size. I will be sending at most 8200 ADC values at a time.
+Currently, I am sending double values which are easy to represent our
+situation, but are quite inneficient in space, each taking up 8 bytes
+as opposed to 2 (the Analog Discovery has a 14-bit ADC). I've also
+been sending a 32-bit integer as a timestamp along with the values, so
+I think I could take my 12 bytes of representation and use only 2. The
+question is whether the conversion from double to int16 and back again
+will be efficient enough. I am almost certain that it will be. Also,
+note that by basically encoding our ADC values, we have decreased the
+portability of this data, however since we have closed loop control of
+the entire system that seems like a fairly trivial problem.
 
 
 
