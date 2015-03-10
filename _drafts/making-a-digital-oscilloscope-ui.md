@@ -250,13 +250,53 @@ Currently, I am sending double values which are easy to represent our
 situation, but are quite inneficient in space, each taking up 8 bytes
 as opposed to 2 (the Analog Discovery has a 14-bit ADC). I've also
 been sending a 32-bit integer as a timestamp along with the values, so
-I think I could take my 12 bytes of representation and use only 2. The
-question is whether the conversion from double to int16 and back again
+I think I could take my 12 bytes of representation and use only 2. 
+
+Upon further inspection I noticed that by sending an list of objects
+as opposed to a list of values I was incurring a fair amount of
+overhead, so I switched to just sending a list of double values.
+
+The question is whether the conversion from double to int16 and back again
 will be efficient enough. I am almost certain that it will be. Also,
 note that by basically encoding our ADC values, we have decreased the
 portability of this data, however since we have closed loop control of
-the entire system that seems like a fairly trivial problem.
+the entire system that seems like a fairly trivial problem. I compared
+the difference between sending an array of 16-bit integers and doubles 
+and here are the results:
 
+![Comparison Between Double and int16]({{site.url}}/images/making-oscope-ui/transmission-time-comparison-int16-double.png
+		"Transmission Time of Varied Data Types")
 
+This seems strange, since the double's time increases about twice as
+fast, even though it should be increasing 4 times as fast since
+doubles are typically represented as 64 bits, perhaps there is some
+compression going on.  
+
+For the max data output of the AnalogIn Signal (8192 points), here are
+the median latencies in milliseconds using various datatypes in
+testThroughput.
+
+| Data Type 	| Median Time 	|
+| :-----------:	| :---------: 	|
+| (i32, double)	| 106			|
+| double		| 27			|
+| i16			| 14		  	|
+| i16 w/ conv.	| 17			|
+
+The interesting thing to note here is that the pair of a timestamp
+with a double incurs more overhead than that due to just the added i32
+timestamp. The conversion back and forth between ADC values incurs a
+slight overhead, but definitely seems to be worth it in terms of
+performance, almost halving transmission time.
+
+## Boost Threads
+
+In the past I've used
+[pthreads](http://www.tutorialspoint.com/cplusplus/cpp_multithreading.htm)
+with great success, but since Thrift seems to already use Boost, I
+thought now would be as good of a time as any to try out Boost
+threads. The idea I have is to use the RPC functions to merely copy
+from an array that is populated by a continually running device
+thread.
 
 [1]: https://www.digilentinc.com/Products/Detail.cfm?NavPath=2,842,1018&Prod=ANALOG-DISCOVERY
