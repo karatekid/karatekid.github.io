@@ -90,6 +90,8 @@ Here are a couple more:
 * [Make User Guide](http://www.gnu.org/software/make/manual/make.html)
 * [JFranken Tutorial](http://www.jfranken.de/homepages/johannes/vortraege/make_inhalt.en.html#ToC12)
 * [Some Makefile Template](https://gist.github.com/yorickvP/3171926)
+* [Safyan Makefile
+  Tutorial](https://sites.google.com/site/michaelsafyan/software-engineering/how-to-write-a-makefile)
 
 I've found that my preference of Makefile design comes down to
 preventing mindless repetition while keeping things clear. I'm going
