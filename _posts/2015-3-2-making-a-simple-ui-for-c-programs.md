@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  Making a Simple UI for C Programs
+category: project
 ---
 
 I'm working on a frontend application for the [Digilent Analog

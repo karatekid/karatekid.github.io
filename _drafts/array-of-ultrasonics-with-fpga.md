@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Using a Mojo to query a large array of Ultrasonic Sensors (HCSR04)
+category: project
 ---
 
 You can use a large array of ultrasonics on an arduino, but it can get

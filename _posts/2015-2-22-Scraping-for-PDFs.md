@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Scraping for PDFs
+category: project
 ---
 
 I built a 

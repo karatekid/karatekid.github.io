@@ -1,0 +1,22 @@
+---
+layout: default
+---
+
+<h1 style="text-align:center;"> {{ page.category | capitalize }}s </h1>
+<hr>
+<div class="posts">
+  {% for post in site.posts %}
+  	{% if post.category == page.category %}
+    <article class="post">    
+      
+      <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+
+      <div class="entry">
+        {{ post.content | truncatewords:40}}
+      </div>
+      
+      <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
+    </article>
+	{% endif %}
+  {% endfor %}
+</div>

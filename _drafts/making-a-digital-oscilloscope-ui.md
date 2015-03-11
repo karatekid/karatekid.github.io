@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Making a Digital Oscilloscope UI
+category: project
 ---
 
 I previously [setup a way for C / C++ programs to communicate to a JS
