@@ -289,6 +289,23 @@ timestamp. The conversion back and forth between ADC values incurs a
 slight overhead, but definitely seems to be worth it in terms of
 performance, almost halving transmission time.
 
+I then setup a test to get the difference in transmission of actual
+data between sending a double and sending a i16 w/ the conversion.
+These are the results:
+
+| Data Type		| Mean Time		|
+| :---------:	| :-------:		|
+| double		| 42			|
+| i16 w/ conv.	| 28			|
+
+So, using the ADC value seems to shave a meaningful 10ms off, but
+it seems like some overhead is introduced when viewing the difference
+between these results and the ones viewed above. There is a total of
+~16ms added to the transmission when just querying the Discovery,
+which I discovered by doing all of the normal things and then
+returning an empty array. So, we should be able to get to a transmission
+time of about 17ms by using threads.
+
 ## Boost Threads
 
 In the past I've used
@@ -297,6 +314,22 @@ with great success, but since Thrift seems to already use Boost, I
 thought now would be as good of a time as any to try out Boost
 threads. The idea I have is to use the RPC functions to merely copy
 from an array that is populated by a continually running device
-thread.
+thread. 
+
+I got started using Boost threads
+[here](http://antonym.org/2009/05/threading-with-boost---part-i-creating-threads.html).
+I had a little run in with linking issues and ended up finding help
+[here](http://lists.boost.org/boost-users/2014/12/83422.php). There
+was an interesting compiler option that I used which looked like:
+
+```
+-Wl,-rpath=${path_to_libs}
+```
+
+I believe it invokes the linker partially during compilation and uses
+the lib in rpath.
+
+After I created the device handling thread i was able to get the
+runtime back to just involve the transaction overhead, so ~17ms!
 
 [1]: https://www.digilentinc.com/Products/Detail.cfm?NavPath=2,842,1018&Prod=ANALOG-DISCOVERY
