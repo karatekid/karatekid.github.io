@@ -333,4 +333,13 @@ the lib in rpath.
 After I created the device handling thread i was able to get the
 runtime back to just involve the transaction overhead, so ~17ms!
 
+## Creating Interfaces for Analog Discovery Measurements
+
+The first thing that I had to do was actually fix the header file that
+digilent provides people with. It's located at
+`usr/local/include/digilent/waveforms/dwf.h`. I modified all of their
+const variables which they were initializing to be static const,
+otherwise when you include it more than once you'd get a multiple
+definition error on linking.
+
 [1]: https://www.digilentinc.com/Products/Detail.cfm?NavPath=2,842,1018&Prod=ANALOG-DISCOVERY
