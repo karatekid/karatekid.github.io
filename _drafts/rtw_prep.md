@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Arrival in Taiwan (Week 1)
+title: Preparation
 category: personal
 ---
 
