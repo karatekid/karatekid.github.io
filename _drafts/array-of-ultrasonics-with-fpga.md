@@ -39,12 +39,22 @@ something like this:
 
 ## Serial Communication
 
-To make a serial connection through the AVR interface you basically
-need to write a FSM to control the new\_tx\_data bit and read and write
-the rx\_data and tx\_data respectively. After you do that, you just need
-to wire it up to the AVR interface module, and disable the ADCs. I
-believe that you could alternatively just use the serial module. The
-tutorial that I learned this from is located
+To communicate with an external arduino, I set up a simple 
+communication protocol that takes in 2 command bytes:
+first is [r/~w, len], and the second is [addr]. I also made
+the read bytes separate from the write bytes for more space.
+I tried building it using array syntax
+{% highlight verilog %}
+reg [7:0] arr [255:0];
+{% endhighlight %}
+But I got complaints from ISE when I tried synthesizing because it
+tried treating it like ROM. So, I made it a linear vector of bits, and
+used the verilog part select operator shown here:
+{% highlight verilog %}
+reg arr [255 * 8 - 1:0];
+val = arr[index +: 8]; //arr[index + 8 - 1:index]
+{% endhighlight %}
+The tutorial that I learned this from is located
 [here](https://embeddedmicro.com/tutorials/mojo/hello-world).
 
 ## HCSR04 Module
@@ -57,3 +67,10 @@ means that the distance traveled = time * Vsound / 2.
 * It has a range of 2 - 400cm.
 * It runs on 5V.
 * Measurement cycle is recommended to be > 60ms.
+
+One thing that I had to do, was to allow the hcsr04 module to use a
+logic clock and a much slower clock (to count ticks). I could build my
+own internal clock divider in each hcsr04, but there is no reason to
+have multiple dividers, instead I could just use one external that
+feeds into each module.
+
