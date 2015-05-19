@@ -46,8 +46,11 @@ After reading a couple of very useful blogs and websites detailing
 other people's adventures doing similar trips I got a better idea of
 what I'd need to do to prepare. These blogs included: 
 
-* [Backpackin China](backpackinchina.com)
-* [???](???.com)
+* [Backpack In China](backpackinchina.com)
+* [The Dragon Trip](thedragontrip.com)
+* [Goats On The Road](www.goatsontheroad.com%2Fbudget-guide-to-backpacking-china%2F&sa=D&sntz=1&usg=AFQjCNHbS4IudrGVj_jM8r19bxDoCsKqfQ)
+
+## Clothing
 
 So, clothing was a big deal, since I wanted to pack light I couldn't
 take many pairs of clothes, so I needed something that could be washed
@@ -77,3 +80,17 @@ lack of arch support and was a little painful for the first week of
 use. I also got a couple pairs of extra-lite Merino wool socks to help
 keep my feet dry in the humid environment. In hindsight, I think
 tennis shoes would have been just fine.
+
+
+## Miscellaneous Items
+
+### Electronics
+
+### Medicine
+
+### Paperwork
+
+#### Visa
+
+
+## Planning in Countries
