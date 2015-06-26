@@ -2,9 +2,12 @@
 layout: post
 title: Taiwan
 category: personal
+image: taroko-gorge.jpg
 ---
 
+<!--
 ![Taroko Gorge]({{site.url}}/images/rtw15/taroko_scene.jpg "Taroko Gorge Landscape")
+-->
 
 Taiwan is an extremely beautiful and diverse country, for having such
 a small amount of land with which to call home. In fact, Portugese
