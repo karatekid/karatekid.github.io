@@ -1,20 +1,12 @@
 ---
-layout: page
+layout: default
 title: About
 permalink: /about/
 ---
 
-I am currently in the SGUS Masters program at the University of
-Michigan, studying Computer Science.
-
-### More Information
-
-* I'm planning on taking a trip to Asia this summer, here are some of
-the places I was thinking of going:
-	* Taiwan
-	* Shanghai
-
-
-### Contact me
-
-[mchristen96@gmail.com](mailto:mchristen96@gmail.com)
+<div class="post">
+	<h1 class="pageTitle">About Long Haul</h1>
+	<p class="intro">This is a generic blog using <a href="http://jekyllrb.com">Jekyll</a>, I'm using the Long-Haul theme.</p>
+	<p>I hope to use this blog to write about cool projects I'm
+	working on as well as interesting experiences in my life.</p>
+</div>
