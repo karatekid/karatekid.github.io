@@ -19,6 +19,8 @@ navigation:
    url: /about
  - title: Contact
    url: /contact
+ - title: Travel
+   url: /travel
 
 social:
    github: karatekid
