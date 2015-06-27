@@ -16,7 +16,10 @@ procedure calls, all I had to do was implement the functionalities
 that I provided. One of the annoying aspects was that my C++ server
 couldn't initialize any communications, it could only respond to JS
 requests, but I was able to work around that without too much of a
-hassle. To construct a logical interface I had to truly understand 
+hassle. 
+
+<!--
+To construct a logical interface I had to truly understand 
 how the [Analog Discovery][1] worked.
 
 ## [Analog Discovery][1]
@@ -76,6 +79,8 @@ The Analog Discovery has several measurement instruments:
 * DigitalOut
 * DigitalIO
 
+I focused on AnalogIn, the results follow.
+
 But, we're most concerned with AnalogIn for the time being so we'll
 focus on that for now.
 
@@ -85,7 +90,7 @@ Here is a state machine highlighting common usage of the AnalogIn
 instrument, which is provided by the SDK manual. 
 
 ![AnalogIn State
-Machine]({{site.url}}/images/making-oscope-ui/analogin-fsm.png
+Machine]({{site.baseurl}}/images/making-oscope-ui/analogin-fsm.png
 		"AnalogIn FSM")
 
 These states act as such:
@@ -207,6 +212,8 @@ TriggerSource settings:
 * Auto: set TriggerSource to `!trigsrcNone` and TriggerAutoTimeout to !0
 * Normal: set TriggerSource to `!trigsrcNone` and TriggerAutoTimeout to 0
 
+-->
+
 ## C++ Server to communicate between JS GUI and DWF Library
 
 I first tried using ScanShift acquisition mode with the idea of
@@ -216,7 +223,7 @@ discovery polling actions, but we'll try it without first. Also, note
 that the dwf.h file declares some constants, which causes some nasty
 multiple definition errors when compiling, so be careful.
 
-## Throughput Testing`
+## Throughput Testing
 
 Enabling quick communication between the JS and C++ over Thrift was
 necessary to ensure a good UI on the frontend. Sam did a great job
@@ -229,7 +236,7 @@ assessing the latency of several payloads of varying sizes:
 
 _Test Performed Using JSON Protocol and HttpServerTransport_
 
-![Transmission Time of Varied Payloads]({{site.url}}/images/making-oscope-ui/transmission-time-plot.png
+![Transmission Time of Varied Payloads]({{site.baseurl}}/images/making-oscope-ui/transmission-time-plot.png
 		"Transmission Time of Varied Payloads")
 
 The linear fit had parameters:
@@ -265,7 +272,7 @@ the entire system that seems like a fairly trivial problem. I compared
 the difference between sending an array of 16-bit integers and doubles 
 and here are the results:
 
-![Comparison Between Double and int16]({{site.url}}/images/making-oscope-ui/transmission-time-comparison-int16-double.png
+![Comparison Between Double and int16]({{site.baseurl}}/images/making-oscope-ui/transmission-time-comparison-int16-double.png
 		"Transmission Time of Varied Data Types")
 
 This seems strange, since the double's time increases about twice as
@@ -341,5 +348,8 @@ digilent provides people with. It's located at
 const variables which they were initializing to be static const,
 otherwise when you include it more than once you'd get a multiple
 definition error on linking.
+
+I hope to follow this with updates on future additions and
+improvements to the project.
 
 [1]: https://www.digilentinc.com/Products/Detail.cfm?NavPath=2,842,1018&Prod=ANALOG-DISCOVERY

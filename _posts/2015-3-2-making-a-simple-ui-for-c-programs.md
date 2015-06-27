@@ -74,11 +74,6 @@ So, now I have everything set up to do communication. __The trick is to
 use the JSON protocol and the HttpServer Transport__ in your cpp
 server so that it is compatible with javascript.
 
-Man, I've had a fair amount of problems with linking. It might be a
-good idea to study these a little more in depth so I have a better
-understanding of how Linux takes care of all of these different
-things.
-
 ## Creating a Nice Makefile
 
 I've typically used
