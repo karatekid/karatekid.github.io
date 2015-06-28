@@ -57,7 +57,7 @@ plane full of people! It was pretty crazy, anyways I got my paper and
 returned to the EVA line with raucous joy, glad that I was finally
 getting out of there, I was even humming with happiness. I actually
 grabbed the attention of this tall guy, probably in his fifties that
-was carrying a guitar case and had one of those auras of coolness.
+was carrying a guitar case and had an aura of coolness about him.
 Anyways, he looked over at me and asked me if we've met before, he
 could have sworn that we had. I replied no, but we talked anyways and
 it turned out that he used to play in the band SRC. We parted ways and
@@ -68,8 +68,7 @@ it onto the plane and was on my way to Taiwan.
 
 <figure>
 	<img src="{{site.baseurl}}/assets/img/rtw/taiwan/airport-tired.jpg" alt="">
-	<figcaption>I was pretty tired when I finally took off for
-	Taiwan</figcaption>
+	<figcaption>I was pretty tired when I finally took off for Taiwan</figcaption>
 </figure>
 
 ## My First day in Taiwan
@@ -82,7 +81,7 @@ kindness. We then boarded a train to Hualien, which is a small tourist
 town on the east side of Taiwan. We all talked on the train, and me
 and Andy had a nice chance to catch up on each other's lives. Once we
 arrived in Hualien I was simultaneously struck by the sheer quantity
-of gas scooters and the abundance of people that were eschewing forth
+of gas scooters int the street and the abundance of people that were eschewing forth
 from the train station. 
 
 Unfortunately it was raining, and instead of
@@ -98,3 +97,8 @@ Andy's Aunt introduced us to one of the most delicious parts of Taiwan,
 the dessert of snow ice covered in sugary fruit or other delicious
 toppings. It was most welcome in the heat and humidity that surrounded
 us in Taiwan.
+
+<figure>
+	<img src="{{site.baseurl}}/assets/img/rtw/taiwan/green-hotel-night.jpg" alt="">
+	<figcaption>Our Bed & Breakfast was really cool!</figcaption>
+</figure>
