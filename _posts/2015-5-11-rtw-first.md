@@ -20,7 +20,7 @@ fashion. So, I decided to go over my journal entries and write up
 entries for cohesive segments of my trip, adding detail where I
 thought it was necessary and leaving out the superfluous minutiae
 likewise. So, this is the first entry of hopefully many, giving an
-abbridged summary of my trip around the world during the summer of
+abridged summary of my trip around the world during the summer of
 2015.
 
 ## Getting to Taiwan
@@ -65,6 +65,14 @@ I went to get my ticket, unfortunately they needed a separate piece of
 paper, so I rushed over to the united desk again and caught the last
 attendant while she was just about to leave. Long story short, I made
 it onto the plane and was on my way to Taiwan.
+
+<figure>
+	<img src="{{site.baseurl}}/assets/img/rtw/taiwan/airport-tired.jpg" alt="">
+	<figcaption>I was pretty tired when I finally took off for
+	Taiwan</figcaption>
+</figure>
+
+## My First day in Taiwan
 
 I had been up for quite a while at that point, and slept like a rock
 on the plane. When I finally landed, Andy met me with his uncle and we
