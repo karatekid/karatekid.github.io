@@ -98,7 +98,5 @@ the dessert of snow ice covered in sugary fruit or other delicious
 toppings. It was most welcome in the heat and humidity that surrounded
 us in Taiwan.
 
-<figure>
-	<img src="{{site.baseurl}}/assets/img/rtw/taiwan/green-hotel-night.jpg" alt="">
-	<figcaption>Our Bed & Breakfast was really cool!</figcaption>
-</figure>
+
+{% include figure.html url='/assets/img/rtw/taiwan/green-hotel-night.jpg' caption='Our Bed & Breakfast was really cool!' %}
