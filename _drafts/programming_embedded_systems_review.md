@@ -50,7 +50,26 @@ The book seemed to be split up into 3 and a half parts.
 
 ### Beginner Section
 
+This section introduced the reader to embedded systems as a subject along with their
+cultural and historical significance. It also dealt with dissecting a datasheet
+to get at the meat of a peripheral and processor alike. Later on it elucidated
+what was necessary to get an executable running on a processor and in the
+process discussed compilers, linkers, and debuggers.
+
 #### Chapter 1: Intro
+
+A pretty standard introduction to embedded systems, highlighting their
+importance and why the reader should care that they're reading this book. I'm
+not sure how necessary this was, since I assumed that most readers would have
+atleast some familiarity with embedded systems upon picking the book up. They
+highlighted an important part of embedded systems (that they have real time
+requirements) and all of the design decisions that it influences. The authors
+then dissected a standard embedded systems application and laid bare it's main
+components: input / output, memory, and a processor. In terms of software, this
+leads to the application, driver, and hardware stacks - with the optional rtos
+and network stacks thrown in there. This discussion naturally turned towards the
+selection of processors and what tradeoffs to pay attention to: cost, speed,
+memory, power consumption, development cost.
 
 #### Chapter 2: Deciphering Datasheets
 
