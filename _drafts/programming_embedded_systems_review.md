@@ -69,9 +69,78 @@ components: input / output, memory, and a processor. In terms of software, this
 leads to the application, driver, and hardware stacks - with the optional rtos
 and network stacks thrown in there. This discussion naturally turned towards the
 selection of processors and what tradeoffs to pay attention to: cost, speed,
-memory, power consumption, development cost.
+memory, power consumption, and development cost being chief among them. Then the
+authors harped on these notions while discussing examples.
+
+One really good kernel of wisdom that was conveyed was that you should try to
+avoid dynamic memory, and try to do as much as you could statically.
 
 #### Chapter 2: Deciphering Datasheets
+
+Chapter 2 was all about getting familiar with a new setup and getting ready to
+crank out some good stuff. First and foremost they deal with getting familiar
+with the hardware you're using. This involves thinking about how the data flows
+and what the hardware's main purpose or selling point is. Making a block diagram at this
+stage can be very helpful.
+
+During this section they also gave a really good tip
+by recommending that you keep a notebook for each project. This notebook would
+contain software implementation notes as well as important device information.
+This is helpful while you're working on your project and especially months or
+even years later. Maybe I could put together a computerized version of this?
+
+Later on the authors delve into the specifics of datasheets, breaking out what
+the schematic icons mean, and so forth. Then they start getting into interesting
+territory by getting into memory mapped I/O. They explain it as a way to access
+peripherals while looking like you're just talking to memory, and regard it as
+far superior to using a separate I/O space. When writing or reading to those
+parts in MMIO, it can cause a peripheral to do something. They recommend making
+a memory map of names to address ranges and eventually turning that into a
+usable c header file.
+
+The next aspect of embedded systems that they get into is communication with
+peripherals, splitting it between polling and interrupts. They go into the
+advantages of both and give a brief introduction to interrupts. I think they
+could have used some more graphics and given a more thorough explanation of
+interrupts.
+
+Next they get into understanding your processor. And provide a list of questions
+you should ask yourself when viewing it. They are:
+
+* Where does it get an instruction after reset?
+* What's the state after a reset?
+* How are interrupts setup, do they need to be disabled?
+* What's up with the interrupt vector table, and how do you acknowledge or
+  disable interrupts?
+
+They then delve into creating a slim driver for the peripherals.
+
+Next they explain what goes into getting a good initialization on your
+processor. I found this section **Especially Useful**, they break it up into 4
+stages: reset, hardware initialization, startup, and calling main.
+
+##### Reset
+The reset
+code is a small piece of assembly that needs to be located  at a processor
+specific section of memory. Its sole job is to transfer control to the hardware
+initialization step.
+
+##### HW Initialization
+The hardware initialization section informs the processor
+of its environment and is a good spot to initialize the interrupt controller and
+other critical peripherals. Note that these peripherals include things like
+memory, not project-dependent items like an accelerometer. Once it's done all of
+ROM and RAM should be available and interrupts should be in a sensical state.
+
+##### Startup Code
+This should enable all other code that is written in a higher level language.
+So, it should initialize the stack. This section was a little thin on what that
+entailed. It should then call the main section.
+
+This section also introduced [Embedded Systems
+Design](http://www.embedded.com/magazines) magazine, which seems like a treasure
+trove of useful information.
+
 
 #### Chapter 3: HW is for Hello World
 
