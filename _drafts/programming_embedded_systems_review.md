@@ -132,10 +132,18 @@ other critical peripherals. Note that these peripherals include things like
 memory, not project-dependent items like an accelerometer. Once it's done all of
 ROM and RAM should be available and interrupts should be in a sensical state.
 
+* Disable interrupts
+* Copy initialized data from ROM to RAM
+* 0 the uninitialized data area
+
 ##### Startup Code
 This should enable all other code that is written in a higher level language.
 So, it should initialize the stack. This section was a little thin on what that
 entailed. It should then call the main section.
+
+* Allocate space for and initialize the stack
+* Initialize the processor's stack pointer
+* Call `main`
 
 This section also introduced [Embedded Systems
 Design](http://www.embedded.com/magazines) magazine, which seems like a treasure
@@ -144,7 +152,49 @@ trove of useful information.
 
 #### Chapter 3: HW is for Hello World
 
+This was a pretty straight forward example embedded systems application example.
+It just involved working with GPIO and figuring out how to make a looping delay.
+
 #### Chapter 4: From C to a HW Executable
+
+This section dealt almost exclusively with compiling, linking, and loading using
+gnu tools. It discusses the differences between standard compiling and
+cross-compiling and breaks down the steps needed to get your code onto your
+hardware into 3 steps. Source to object files, link them all into a single
+relocatable object file, and then assign physical addresses to the relative
+offsets within the relocatable program.
+
+Common object file formats include COFF or ELF. The authors go into the nitty
+gritty details of object files including the 4 sections: text (where code
+resides), data (where initialized global variables reside), bss (where global
+uninitialized data resides), and the symbol table where symbols are resolved.
+
+Linking resolves the symbols using the symbol table and is typically done with
+the gnu tool `ld`. It combines those various object files into the one
+relocatable file.
+
+The authors then go back into talking about the startup file and include some
+more useful information. This was kind of frustrating, I've inserted this
+information in my review of chapter 2 where I thought it shold be. A GNU package
+called [libgloss](https://sourceware.org/newlib/) has good startup code for many
+processors.
+
+Then we need to assemble the startup code into an object file that can be used
+in linking. A special linker command may be necessary to prevent standard
+startup code from being generated. 
+
+To convert the relocatable program into a usable binary we use a **locator**.
+You must describe the physical layout of memory to the locator so it can assign
+code and data segments properly to the hardware. This is built into `ld`, the
+memory information must be passed in the form of a linker script. **Note**: use
+of `ld` can be invoked with `gcc` and allows for correct inclusion of multilibs.
+
+The result of linking and loading can give you a **map** file, which lists code
+and data addresses for the final software image. Which seems pretty useful for
+debuging. Another fun fact, is that you can use the `strip` command to get rid
+of debug information in your executable without having to recompile. `objcopy`
+can be used to change file types. `size` can inform you of section sizes. These
+are mostly found within binutils.
 
 #### Chapter 5: Running & Debugging that HW Executable
 
@@ -176,6 +226,9 @@ trove of useful information.
 #### Chapter 14: Optimizing
 
 
+### List of Possibly useful references that they mentioned
+
+
 ### Closing Takeaways for my Future Work
 
 The selection of the ARCOM-viper development kit emphasized that I'm going to
@@ -205,8 +258,8 @@ a much better job.
 
 This book gave me a couple ideas for some future projects / things to set up:
 
-* A standard C Makefile, style-guide, and automatic linter (mostly a setup
-  thing)
+* A standard C Makefile, style-guide, automatic linter (mostly a setup
+  thing), and build setup for embedded systems (linker, locator, etc.)
 * Putting together a library of standard embedded utilities, perhaps in addition
   to the one recommended [newlib](https://sourceware.org/newlib/).
 * Creating a more standardized project hierarchy to allow for a smoother way of
