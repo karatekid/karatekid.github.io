@@ -264,9 +264,92 @@ also mention filesystems and reference the typical FAT file system.
 
 #### Chapter 7: Peripherals & Drivers
 
+A fine delineation is made between on-chip & external peripherals. They
+highlight how most of the operations you'll need to perform boil down to
+creating good interfaces between control and status registers through MMIO.
+Reminding you to use the `volatile` keyword then explaining bit manipulation
+the wriers leave a pretty useful macro:
+
+```c
+#define BIT(X) (1 << (X))
+```
+
+They also talk about using structs with unions or a size identifier to more
+declaratively access bits. After all of the bitfield stuff they get into the
+essentials of good hardware abstraction and interfaces. They define some steps
+which can be broken up into 5 main progressions:
+
+1. Creating a memory mapped representation of control & status registers
+2. Setting up variables to track state, temporary variables for write only
+   registers
+3. Creating an initialization method
+4. Defining an API for the driver
+  * This could include creating software devices, ie) a virtual timer
+5. Setting up ISRs
+
+They then use a serial device as an example, which could have been improvedwth
+the use of some more visual aids, e.g. a datasheet screenshot.
+
+Some additional add-ons that could be aded are error checking, configuration,
+nicer functionalities, interrupts. Good design has to try to balance the
+priorities of requirements, resource usage, and resource sharing.
+
 #### Chapter 8: Interrupts
 
+There are several ways code execution can be interrupted: traps, exceptions, and
+interrupts fall pretty high on that list. Interrupts are asynchronous and have
+some interesting properties that are useful to know when working with them. Some
+are maskable, some aren't. Each interrupt has a number and a source. There are
+also interrupt priorities that you need to establish to determine what should
+get precedence over what. Also, you need to figure out whether your interrupts
+should be able to nest, note that too much nesting could cause the stack to go
+out of bounds.
+
+After an interrupt comes in there are a few things that must happen:
+
+1. Save state onto the stack, this includes the PC, registers, and flags
+2. Acknowledge the interrupt
+3. Restore context
+
+1 & 3 are typically done automatically by the processor.
+
+Setting up ISRs to respond to interrupts can get kind of tricky. The book
+doesn't delve into too much detail on how that is acomplished, they don't
+discuss the interrupt vector table too much or how interrupts actually work in
+the hardware. It's good to include an interrupt map in your **notebook** listing
+the number of the interrupt and the source that's coming in, maybe throw in the
+pin number. When writing an ISR brevity is key, you can even hand the process
+off to a deffered service routine (DSR) that gets executed in the main code,
+some RTOS's necessitate that you do that. When defining the interrupt different
+compilers use different methodologies to add the steps for 1 & 3, gnu uses the
+`__attribute__` keyword mixed with an interrupt, while others just use the
+`interrupt` keyword.
+
+
+When different pieces of code are sharing variables, it can get tricky once
+interrupts come into the mix. To guard sections that use these shared variables
+we can lock them by disabling and enabling interrupts around them, we call those
+parts of the code critical sections.
+
+Then the authors branch off and discuss how timers work and the usefulness of
+watchdogs, and give a good example by updating the LED blink code. They also
+briefly mention schedulers.
+
+When troubleshooting follow these steps:
+* Get the first interrupt firing
+* Ensure global ints are enabled
+* Ensure its installed in the interrupt vector table
+* Remember to have atleast a default ISR for all interrupt sources.
+* Make sure process context is getting restored properly
+* Know that you're acknowledging the interrupt
+* Avoid race conditions
+* Make sure you're enabling and disabling interrupts properly.
+
 #### Chapter 9: Combining ^
+
+This basically gave an example of the previous 3 sections by creating an example
+terminal, it was mostly application details. I feel like it could have been
+better integrated with the past 3 chapters.
 
 
 ### Operating Systems
@@ -319,8 +402,11 @@ This book gave me a couple ideas for some future projects / things to set up:
 
 * A standard C Makefile, style-guide, automatic linter (mostly a setup
   thing), and build setup for embedded systems (linker, locator, etc.)
+  * Maybe setup a docker or puppet file or just a straight up VM with all the
+    tools preinstalled
 * Putting together a library of standard embedded utilities, perhaps in addition
   to the one recommended [newlib](https://sourceware.org/newlib/).
+  * An error checking library wouldn't hurt
 * Creating a more standardized project hierarchy to allow for a smoother way of
   adding resources to projects, viewing, and reviewing them.
 * A simulator for separate processors to allow easier testing of embedded code.
@@ -336,3 +422,9 @@ depth in EECS 473 via Professor Brehob.
 I could stand to learn more about the interactions between the computer that
 compiles the code and the embedded system, chiefly chapters 4 & 5 which deal
 with linking, loading, and debugging.
+
+#### Next review
+
+I found a couple things that I could do better when reviewing books:
+
+* instead of summarizing everything just grab the couple nuggets of gold
