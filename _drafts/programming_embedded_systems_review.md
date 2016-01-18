@@ -235,6 +235,33 @@ and version control.
 
 #### Chapter 6: Memory
 
+The authors did a good job of describing the various types of memory in this
+section and also went into various ways of verifying and using it.
+
+There are 3 types of memory RAM, ROM, and a hybrid of the two. RAM can be DRAM
+or SRAM, the difference being that DRAM is less expensive but requires constant
+refreshing by a DRAM controller. ROM can be PROM, EPROM, or masked memory.
+Hybrid involves NVRAM, EEPROM, and Flash. Flash is great, but has the one
+downside in that it has to be accessed at a sector by sector basis.
+
+DMA is described as a way for hardware to do large memory operations in place of
+the processor. Endinanness is discussed, big has MSB on the left and little has
+MSB on the right (MSB = most significant byte). Big endian is used in TCP/IP, so
+watch out for that in network stacks. You can use the `htons` and `ntohs`
+commands - and compatriots - to convert to the right endianness when working in
+a network.
+
+Memory testing is covered thoroughly, and while interesting didn't seem all that
+necessary for the purposes of the book. The authors identify the most common
+issues of memory issues (a short or a flat) and use those to create useful tests
+of memory. These includes tests for address collisions, the independence of
+setting a 1 & 0 bit, and setting control bits. So these tests included a walking
+1's test of data, then walking address 1's and testing all the others, and a
+write increment and invert test.
+
+Then they delve into the usefulness of checksums and in particular CRC. They
+also mention filesystems and reference the typical FAT file system.
+
 #### Chapter 7: Peripherals & Drivers
 
 #### Chapter 8: Interrupts
