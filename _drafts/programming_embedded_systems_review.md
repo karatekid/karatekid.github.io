@@ -336,6 +336,7 @@ watchdogs, and give a good example by updating the LED blink code. They also
 briefly mention schedulers.
 
 When troubleshooting follow these steps:
+
 * Get the first interrupt firing
 * Ensure global ints are enabled
 * Ensure its installed in the interrupt vector table
@@ -355,6 +356,72 @@ better integrated with the past 3 chapters.
 ### Operating Systems
 
 #### Chapter 10: Operating System Fundamentals
+
+Whole books have been written on operating systems, this section tries to deal
+with the role that OS's play in embedded systems. Mostly, embedded systems have
+real time requirements that need to be met, and various ways to coordinate
+separate tasks, RTOS's try to alleviate that issue.
+
+Multitasking is an important concept and you can easily craft examples in which
+various tasks need to be completed within an embedded system. Each of these
+tasks has deadlines that must be met. Thus the concept of threads are
+born. There are 2 types of OS's thread-driven and event-driven. We'll be dealing
+exclusively with thread driven. These threads need to be scheduled in a certain
+way, some algorithms are FIFO, shortest job, round robin, and preemptive and
+non-preemptive priority. There are also real-time scheduling algorithms that
+include real time executive, EDF, min lax (available time - remaining time),
+resource reservation, and my personal favorite rate monotonic scheduling (RMS).
+These different types of scheduling have different requirements, for example
+some need the tasks to be periodic.
+
+RMS is pretty much the best static scheduler and is fairly straightforward to
+implement. Also, you can verify if your tasks can be scheduled by checking the
+worst case performance against this function
+
+```
+Wn = n * (2 ^ (1/n) - 1)
+```
+
+Which represents the minimum supported utilization by the algorithm per number
+of tasks, utilization being (work / period). If your utilization is greater than
+the value from the function it may still be schedulable, but you'll have to work
+it out by hand. See Professor Mark Brehob. In this scheme, the lower the period,
+the higher the priority.
+
+Dynamic schedulers are pretty complicated, don't make your own.
+
+In the scheduler every schedule tick you check if you need to switch tasks and
+if you do, then you need to perform a context switch, which involves saving the:
+
+* PC
+* SP
+* processor flags & registers
+* Task control block
+  * context
+  * state
+  * priority
+  * entry-point fxn
+  * task data
+    * params
+    * input
+
+Each task has a state of ready, running, or waiting. The scheduler can be
+blocked in critical sections.
+
+To synchronize tasks you can use mutexes for shared resources and semaphores or
+conditional variables for signalling. There are also event flags, spinlocks,
+counters and alarms.
+
+There is also the issue of priority inversion / inheritance when higher priority
+tasks are blocking on lower priority tasks.
+
+A cool way to communicate between tasks without using globals is to use message
+passing, I'm a big fan of this and really appreciated its inclusion in
+OpenPilot.
+
+Integrating interrupts with schedulers can get tricky, sometimes you must use a
+DSR with an ISR.
+
 
 #### Chapter 11: RTOS example - eCos RTOS
 
