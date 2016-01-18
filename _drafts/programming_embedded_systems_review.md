@@ -422,18 +422,41 @@ OpenPilot.
 Integrating interrupts with schedulers can get tricky, sometimes you must use a
 DSR with an ISR.
 
-
 #### Chapter 11: RTOS example - eCos RTOS
+
+This was basically an API highlight showing how mutexes, threads, semaphores,
+message passing, and interrupts worked on this RTOS.
 
 #### Chapter 12: embedded Linux example
 
+Similar to chapter 11, just an application example, but this time using posix
+pthreads.
 
 ### Going Further
 
 #### Chapter 13: Extending Functionality
 
+Communication channels, such as SPI & I2C were discussed. They also mentioned
+that sometimes you need to bit-bang the protocol out if you don't have enough
+built-in peripherals for it.
+
+They also harped on extending hardware by using FPGA's, PLD's and CPLD's.
+
+PWM was also discussed, along with simple networking protocols. It seemed like
+those examples were a bit out of date, and made no reference to wireless
+protocols.
+
 #### Chapter 14: Optimizing
 
+Two factors were addressed when trying to optimize embedded programs, space and
+size. They talk about a couple of compiler optimizations, such as using special
+flags when using gcc, in addition to using special keywords in your source, and
+not using double operations when you don't need to. You can try loop unrolling
+if you need to, don't use a heap and avoid the standard lib. A big power saver
+is using special low-power modes on your processor when you aren't performing
+any work. And then they talk for a brief minute or two about how C++ can be used
+in embedded systems programming if you stick away from templates, exceptions and
+run-time type identification.
 
 ### List of Possibly useful references that they mentioned
 
@@ -495,3 +518,4 @@ with linking, loading, and debugging.
 I found a couple things that I could do better when reviewing books:
 
 * instead of summarizing everything just grab the couple nuggets of gold
+* more graphics in my summary
