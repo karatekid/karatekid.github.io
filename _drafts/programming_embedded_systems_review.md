@@ -198,6 +198,38 @@ are mostly found within binutils.
 
 #### Chapter 5: Running & Debugging that HW Executable
 
+This chapter accentuated a couple of methods for going about debugging an
+embedded system, chiefly debug monitors, remote debuggers, and emulators. It
+also discussed a couple of methods that are useful for loading code and
+optimizing / profiling code.
+
+A debug monitor allows the user to download and run software in RAM while
+exposing a command line interface which allows various accesses to the low level
+hardware. This monitor is in non-volatile memory. A similar thing is a
+bootloader, which can be used to transfer code to the system. You could
+alternatively load code directly by overwriting ROM. The debug monitor runs on
+the device.
+
+A remote debugger can download, execute, and debug embedded software. There is a
+client of sorts located on the device, while the main debugger resides on the
+host computer, an example of such a debugger could be `gdb`. It allows you to
+interact with RAM and various registers.
+
+An emulator or (ICE) can do much more than a remote debugger by allowing you to view and
+interact with ROM as well. It can also give you almost full control of the
+processor, and can even allow you to set hardware breakpoints. The host
+frontend is a remote debugger. Similar to emulators is a background debug mode
+or JTAG, which I prefer.
+
+The authors also mention simulators for testing code on the host machine. I
+think it would be really enlightening to implement one. They also reccomend a
+couple of tools for debugging hardware, such as logic analyzers, oscilloscopes,
+setting GPIO pins for timing, and the like.
+
+They also mention various development tools such as
+[linters](http://www.embedded.com/electronics-blogs/beginner-s-corner/4023960/Introduction-to-Lint)
+and version control.
+
 
 ### Core Embedded System Principles
 
@@ -273,3 +305,7 @@ separate devices.
 * Write a static scheduler. Most likely a RMS scheduler. I think it would be a
   great learning experience, especially since I was taught the theory quite in
 depth in EECS 473 via Professor Brehob.
+
+I could stand to learn more about the interactions between the computer that
+compiles the code and the embedded system, chiefly chapters 4 & 5 which deal
+with linking, loading, and debugging.
