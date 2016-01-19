@@ -22,6 +22,8 @@ navigation:
    url: /contact
  - title: Travel
    url: /travel
+ - title: Writeups
+   url: /writeups
 
 social:
    github: karatekid

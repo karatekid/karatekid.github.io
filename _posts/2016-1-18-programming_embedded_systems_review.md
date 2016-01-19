@@ -460,6 +460,30 @@ run-time type identification.
 
 ### List of Possibly useful references that they mentioned
 
+* The C Programming Language
+* ganssle.com - good C coding standards
+* quantum-leaps.com  Miro Samek C Coding standards
+* Designing Embedded Systems - John Catsoulis
+* Design for Debugability - ESP
+* Managing Projects w/ GNU make
+* Debugging w/ GDB: GNU source-level debugger
+* Introduction to in circuit emulators - ESP
+* Introduction to On-Chip debug - ESP
+* How to choose an in-circuit emulator - ESP
+* Introduction to Lint - ESP; splint.com
+* Selecting a real time operating system - ESP
+* Real-time concepts for embedded system
+* My favorite software deboncers - ESP
+* How to choose a sensible sampling rate - ESP
+* Understanding the Linux Kernel
+* Linux Device Drivers
+* Building Embedded Linux Systems
+* PThreads Programming
+* TCP/IP Illustrated
+* TCP/IP Guide: A comprehensive, Illustrated Internet Protocols Reference
+* gcc.gnu.org/onlinedocs
+
+
 
 ### Closing Takeaways for my Future Work
 
