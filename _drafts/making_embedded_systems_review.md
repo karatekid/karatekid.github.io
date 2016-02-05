@@ -321,7 +321,8 @@ table is located in the LPC17xx:
 {% highlight c %}
 
 __attribute__ ((section(".isr_vector")))
-void (* const g_pfnVectors[])(void) = {  // * markdown fix
+void (*const g_pfnVectors[])(void)//* put here to fix markdown issue
+= {
     // Core Level - CM3
     &_vStackTop,
     // The initial stack pointer
@@ -345,7 +346,169 @@ explained, noting its ability to greatly increase the robustness of a system.
 
 #### Chapter 6: Peripherals
 
+This chapter discusses how peripherals fit into embedded systems, compares and
+contrasts some, looks into communication methods between processors and
+peripherals, and then takes a gander at the software that makes them all work
+together.
+
+##### Types of Peripherals
+
+Elecia very briefly discusses memory before getting into buttons and key
+matrices. A cheap matrix can be made using row/col scanning to get an M x N
+matrix using M + N lines. Row/col scanning involves turning rows on in sequence
+and seeing which columns are on at each point. An expensive one uses
+__Charlieplexing__ to get `N^2 - N matrix using N lines & N diodes. Elecia
+doesn't explain it, but offers [this
+link](http://pcbheaven.com/wikipages/Charlieplexing/) to use to figure it out.
+It's pretty neat, and uses the high-impedance state of output pins to do it's
+work: here's a somewhat useful picture:
+
+{% include figure.html url='/assets/img/making_embedded_systems/charlieplexing.png'
+caption='Charlieplexing'%}
+
+We then get into sensors and some fun talks about DSP and FCC radiation
+regulations. Actuators, and motors of all varying types (brushed, stepper,
+brushless) are all discussed. This broaches the topic of linear and rotary
+position encoders. Rotary ones tell you which of ~8 positions it is in, linear
+will increment every time it rotates a certain amount. Some timer/counters can
+increment this value for you. The topic of motors always lends itself nicely to
+__PID control__, which at its roots is merely the use of feedback in a system
+based on the error (difference between current point and target point). She uses
+a methodology where you set the `P`, then `I`, then `D`, whereas I was taught to
+set `P`, then `D`, then `I` only if you must since `I` can cause a bunch of
+problems. A more intricate solution is the [Ziegler-Nichols
+method](https://en.wikipedia.org/wiki/Ziegler%E2%80%93Nichols_method). There's a
+great explanation of implementing PID
+[here](http://brettbeauregard.com/blog/2011/04/improving-the-beginners-pid-introduction/).
+
+We then get into displays, like 7-segment LEDs and start discussing graphic
+assets and glyphs. Elecia drops off into a whole tangent about glyph layouts.
+There's a neat design here:
+
+{% include figure.html url='/assets/img/making_embedded_systems/graphics.png'
+caption='Graphic organization'%}
+
+Then she uses that to talk about RLE (run length encoding) to encode bitmaps.
+She also discusses anti-aliasing to soften edges of graphics.
+
+##### Communication Protocols
+
+OSI layers are brought to the forefront of the topic, these are a separation of
+responsibilities in a communication stack and are comprised of:
+
+* Physical - bit transfer
+* Data - byte transfer
+* Network - variable length packet transfer
+* Transport - move blocks (could be larger than max packet)
+* Session - manage connection between local & remote
+* Presentation - provide structure, maybe encryption
+* Application - UI
+
+We're mostly concerned with the data layer. Elecia discusses ethernet and wifi
+briefly, then discusses serial, SPI, I2C. I also learned that TTL is (0~3V)
+while RS-232 (+/- 12V). Here's a little handy table that I put together from the
+rough approximations that Elecia gave:
+
+| | Serial | SPI | I2C | 1-Wire | USB |
+| - | - | - | - | - | - |
+| Length | 15m | < 1m | + 3m | 10m | 5m |
+| Speed | 2400 - 115200 | 100 MHz (clk dependent) | 10kbps, 100k, 400k, 1M | 100k | 400M |
+| # wires (w/o gnd) | 2 [RX, TX] (agreed clk) | 4 [MOSI, MISO, CLK, CS] | 2 [SCL, SDA] (128 possible devices) | 1 (agreed clk) | 3 (__Really Complicated__)|
+
+She then mentions parallel buses, as another way of moving bits even faster.
+
+##### Putting it Together
+
+When we are gathering all of this data, we need somewhere to put it, circular
+buffers are a great place to put it, as my friend Chris knows all too well. You
+can do a couple of tricks when working with circular buffers, one is to add
+anoter pointer to the structure that keeps track of where it is now free to add
+more elements. So, you end up with a couple of different sections of your
+buffer, free to write (b/t write & free ptrs.), free to read (b/t read & write
+ptrs.), and currently being read (b/t free & read ptrs.)
+
+There are also, sometimes hardware implemented datastructrures in which you can
+store your data, the most common of which is a FIFO. DMA's don't necessarily
+store your data, but allow you to send and receive large amounts of data out of
+band from your typical processing, which can signicantly improve runtime, while
+adding some complexity. Elecia then shows off some nice math to analyze how much
+faster DMA is than bit-banging.
+
+To make our communication robust it's often a good idea to version our code and
+checksum our packets, CRC is a good checksum to use.
+
+We then discuss design patterns briefly. The different patterns are
+__flyweight__ and __factory__. __Flyweight__ pattern apparently refers to a
+large collection of objects, such as a glyphset. A __factory__ pattern is about
+subclassing things. Here's an example that she gave:
+
+{% include figure.html url='/assets/img/making_embedded_systems/flyweight_factory.png'
+caption='Factory and Flyweight Patterns'%}
+
+I'm not really sure why she added this here, it seemed very superfluous.
+
 #### Chapter 7: Updating Code
+
+This chapter deals with the whole issue of deploying code, after the hardware
+has left the building. There are a lot of concerns to keep in mind when
+performing these sorts of updates, not least of which are the storage mechanism,
+communication protocol, rom programming, scratch RAM, and running RAM.
+
+##### Bootloaders
+
+You can update code like this with the use of a bootloader, there are a couple
+of different types of bootloaders.
+
+{% include figure.html url='/assets/img/making_embedded_systems/bootloaders.png'
+caption='Different Bootloader Designs'%}
+
+* __On-Board Bootloader__: On load put code directly on system, this bootloader
+  is usually completely separate from your code, offering great simplicity, but
+  not much flexibility.
+* __Build Your Own Bootloader__: This bootloader is mixed with your other code,
+  and makes use of RAM to store downloaded code temporarily, it is then verified
+with a CRC.
+
+{% include figure.html url='/assets/img/making_embedded_systems/build_own_bootloader.png'
+caption='Build Your Own Bootloader'%}
+
+* __Modify the Bootloader__: Load a bootloader, that writes itself into where
+  the old one used to be.
+* __Brick Loader__: This can brick the device in between erasing the flash and
+  having the new code fully loaded onto the system. Keeping this window small is
+  a design constraint. This runs code from ram, which some processors disallow.
+  It then copies the new code to scratch, erases the old code, and programs the
+  new code.
+
+##### Linker Scripts
+
+The chapter then uses bootloaders to launch into linker scripts, and the general
+process of linking. The linker forms an executable which has these 3 segments:
+
+* `bss`: uninitialized global in RAM
+* `data`: initialized globals in ram (may have heap/stack, and `bss` as
+  subsegment)
+* `text`: code & constants, ROM/RAM
+  * `vector`: interrupt vector table
+
+When you're modifying the linker script start from the initial `.ld` script and
+work off of it. You can use the map file to confirm your changes. Elecia uses
+the linker scripts to help create this bootloader. She gets the functionality as
+seen in this diagram.
+
+{% include figure.html url='/assets/img/making_embedded_systems/loader_flow.png'
+caption='Loader Flowchart'%}
+
+I wasn't sure about why she needs to copy the loader from RAM and not just
+execute it in ROM, but since we're overwriting ROM, we don't want to
+accidentally overwrite what we're doing right now.
+
+The loader can reside on the system, but that would require an ability to
+leapfrog to newer versions, or you could get it from the same location that you
+get the new code.
+
+This definitely raises some security concerns, some possible countermeasures
+involve non-readable on-chip ROM.
 
 #### Chapter 8: Optimizing Code
 
