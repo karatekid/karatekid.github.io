@@ -512,11 +512,140 @@ involve non-readable on-chip ROM.
 
 #### Chapter 8: Optimizing Code
 
+> We should forget about small efficiencies, say about 97% of the time:
+> premature optimization is the root of all evil. - _Donald Knuth_
+
+When we try to optimize something, we must first ask ourselves what we're
+optimizing for, some of the things to consider are development time, code space,
+amount of RAM used, and # of cycles used.
+
+##### Code Space
+
+When optimizing for code space viewing the map file can be extremely helpful.
+The `.rodata` section holds read only data, an interesting fact is that
+`#define`s take up space, but can't be seen very well in the map file, while
+`const`s take up the same amount of space but can be seen.
+
+Always try the easy way first, and try applying the -Os (letter, not #). When
+making optimizations, it is a good idea to keep track of changes made in a table
+not unlike this:
+
+| Action taken | `text` | `data` | Total | Total (hex) | Freed | Total Freed (since start) |
+
+Libraries can be a large source of bloat, getting rid of the need of them can
+significantly reduce code size. Macros and functions have an interesting
+tradeoff, macros take up more code space, while functions add an entry on the
+stack. Another thing you can do is `#define` logging away when it is not being
+used, e.g. production.
+
+##### RAM
+
+{% include figure.html url='/assets/img/making_embedded_systems/memory_map.png'
+caption='Memory Map'%}
+
+First and foremost try to get rid of dynamic memory allocation, which can lead
+to wasted RAM, loss of processor cycles, and fragmentation. You can do this with
+the use of globals, which while frowned upon, can be seen as quite beneficial to
+the alternative on an embedded system. You can use a __ping-pong__ buffer when
+getting interrupt data, which flips between 2 buffers, changing the pointer once
+the data has been written successfully.
+
+When passing in function pointers, try to stick to using n-bit parameters for an
+n-bit processor and pointers for structs. You can learn about the assembly by
+reading the list (`.lst`) file. Recursive functions kill the stack so don't do
+them, unless it's tail recursive (then the compiler can optimize it away).
+
+One neat trick is to overlay different memory resources that aren't used at the
+same time onto the same area of physical memory. You can do this by creating a
+union of several structures that has an owner, creating a singleton to manage
+the buffer, or modifying the linker script (which makes everything seem
+completely normal, adding no interdependencies, but adds a hidden constraint on
+your code).
+
+##### Speed
+
+You can profile the speed of your code by raising / lowering I/O pins when you
+enter / exit a function and viewing the output with and oscilloscope. You can
+also time functions by counting cycles, and running things a couple of times to
+get a good average, then logging the result. You can also do that with functions
+that are much shorter, by allowing them to run multiple times in between taking
+time. You can also make a sampling-based profiler which samples at a time that
+is aperiodic with any other interrupts you have and logs the return address of
+where it was, this allows you to see what interrupts you're in / what pieces of
+code you most often find yourself.
+
+{% include figure.html url='/assets/img/making_embedded_systems/speed_profile.png'
+caption='Speed Profiling Comparison'%}
+
+##### Miscellaneous Optimizations
+
+* Possibly try moving code to faster RAM
+* Use native processor data size
+* Flatten function calls
+* Use pointer arithmetic as opposed to arrays and indices
+* Unroll loops
+* Use lookup tables
+
+Elecia added a pretty clever analogy to explain to non-technical people the
+reason behind optimizations.
+
 #### Chapter 9: Embedded Math
 
-#### Chapter 10: Optimizing Power
+There are a lot of useful mathematics involved when working with integers on
+embedded systems. Elecia highlights this when she defines precision as noise.
+She gives us a good hint to try using bit operators whenever we can to avoid
+performing costly divides and `%`s.
+
+We get into filters pretty quickly, and evaluate the difference between a block
+and rolling average. The block only updates on a set period, but allows for many
+less divide operations. 
+
+Generally try to apply _Horner's Scheme_ which means diminishing the amount of
+costly operations that you have to do when performing arithmetic. Using the
+taylor series is immensely useful for approximating real world applications.
+Often when doing the necessary divides you can alternatively multiply and shift,
+which is much more efficient. You can also scale the input from (-1, +1) to
+something like (-1024, +1024), which reduces noisy precision and allows you to
+keep using integers. Make sure you watch out for overflows. When using Taylor
+series you can often use a lookup table. You can combine that with linear
+interpolation, so that you can have more points cover the more tricky parts of
+your function. It also allows you to predict past your table.
+
+{% include figure.html url='/assets/img/making_embedded_systems/table_w_interpolation.png'
+caption='Lookup Table with Linear Interpolation'%}
+
+You can also fake floating point by using fixed point numbers with binary
+scaling.
+
+#### Chapter 10: Optimizing for Power
+
+When trying to reduce power turn off everything that you're not using. Realize
+that this sacrifices time it takes to get them up and running again. When
+configuring IO pins try to set them as pulled-down inputs, if that's not
+possible pulled-up inputs, and if that's not possible a low output. You can also
+slow your clock down. Also, you can set your processor into a sleep state:
+
+* slow
+* idle / sleep
+* deep sleep
+* power down
+* power off
+
+Note, that the further down you go, the less power you use, but the longer it
+takes to get back to a usable state. Don't forget to disable your watchdog when
+sleeping, or pet it every so often. You can also chain smaller processors to
+larger ones, to use less power and only wake them when entirely necessary.
 
 ### Closing Takeaways for my Future Work
+
+I thought this book had a lot of really useful advice, but at the same time it
+ddn't seem very cohesive. I think focusing on a project might help with that
+issue or simply having more of a linear progression between ideas.
+
+#### Ideas
+
+* Map file parser to profile code size
+* Write a bootloader
 
 ### List of Possibly useful references that Elecia mentioned
 
