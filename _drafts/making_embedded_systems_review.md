@@ -36,8 +36,8 @@ software layer.
 
 ##### Architecture Block Diagram
 
-![Architecture Block Diagram
-]({{site.baseurl}}/assets/img/making_embedded_systems/abd.png "Architecture Block Diagram")
+{% include figure.html url='/assets/img/making_embedded_systems/abd.png'
+caption='Architecture Block Diagram'%}
 
 This is the type of diagram that I most often draw when designing a new system,
 and I find it immensely helpful. Elecia provides some good things to focus on
@@ -49,9 +49,8 @@ others.
 
 ##### Hierarchy of Control
 
-![Hierarchy of Control
-]({{site.baseurl}}/assets/img/making_embedded_systems/hierarchy.png "Hierarchy
-of Control")
+{% include figure.html url='/assets/img/making_embedded_systems/hierarchy.png'
+caption='Hierarchy of Control'%}
 
 The hierarchy of control should be constructed by starting at a high level and
 then working your way down from higher-level concepts to more low-level
@@ -60,9 +59,8 @@ interfaces in your design.
 
 ##### Layered View
 
-![Layered View
-]({{site.baseurl}}/assets/img/making_embedded_systems/layered.png "Layered
-View")
+{% include figure.html url='/assets/img/making_embedded_systems/layered.png'
+caption='Layered View'%}
 
 When constructing a layered view of your system, you can use the size of the
 block to show how much time you estimate it will take. Also, opposite from the
@@ -124,9 +122,8 @@ progresses into hardware tests to verify that all of the connections are
 properly made. Then there is the long cycle of software development work. The
 Gantt chart below elucidates the flow of most embedded projects.
 
-![Gantt Chart of Embeded Systems Development
-]({{site.baseurl}}/assets/img/making_embedded_systems/gantt_chart.png "Gantt
-Chart of Embeded Systems Development")
+{% include figure.html url='/assets/img/making_embedded_systems/gantt_chart.png'
+caption='Gantt Chart of Embeded Systems Development'%}
 
 ##### Reading a Datasheet
 
