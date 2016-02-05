@@ -1,11 +1,11 @@
 ---
 layout: post
-title: Summary of "Making Embedded Systems" by Elicia White
+title: Summary of "Making Embedded Systems" by Elecia White
 category: writeup
 image: making_embedded_systems/cover.jpg
 ---
 
-## Making Embedded Systems by Elicia White
+## Making Embedded Systems by Elecia White
 
 ### Initial Thoughts
 
@@ -17,14 +17,14 @@ lacking any coherent goal to strive towards.
 
 #### Chapter 1: Introduction
 
-The first chapter was a standard introduction to embedded systems. Elicia gave a
+The first chapter was a standard introduction to embedded systems. Elecia gave a
 definition that I really liked, calling embedded systems purpose-built
 computers. She also referenced the unique need to cross-compile when dealing
 with embedded systems.
 
 #### Chapter 2: System Architecture & Design
 
-This was one of the meatier parts of the book, and was where Elicia really tried
+This was one of the meatier parts of the book, and was where Elecia really tried
 drilling in an appreciation for good design by considering the architecture from
 a couple of different perspectives, with heavy emphasis on design patterns. She
 reccomends searching for the whole picture so you can effectively view the
@@ -37,11 +37,10 @@ software layer.
 ##### Architecture Block Diagram
 
 ![Architecture Block Diagram
-]({{site.baseurl}}/assets/img/making_embedded_systems/abd.png "Architecture
-Block Diagram")
+]({{site.baseurl}}/assets/img/making_embedded_systems/abd.png "Architecture Block Diagram")
 
 This is the type of diagram that I most often draw when designing a new system,
-and I find it immensely helpful. Elicia provides some good things to focus on
+and I find it immensely helpful. Elecia provides some good things to focus on
 when constructing it.
 
 You should focus on separating protocol from the peripheral at this stage. You
@@ -84,7 +83,7 @@ between separate components and (if you have people to delegate to) delegate
 the construction of those components. The point being, that these should now be
 very well-defined and separable units.
 
-Elicia, further elucidated on some very handy practices that can be employed to
+Elecia, further elucidated on some very handy practices that can be employed to
 allow for good debugging and design of your code.
 
 Most of her drivers attempt to use the standard linux driver interface of
@@ -107,21 +106,172 @@ as a means of testing them. A human readable file, a csv for example can be
 used to generate input to algorithms which then generate output files. These
 output files can be checked against over and over to perform useful regression
 tests. Also, when you get to test on your local computer you often avoid a lot
-of painful embedded debugging.
+Mjjkjof painful embedded debugging.
 
-One last useful suggestion is to setup a style guideline. Elicia recommended
+One last useful suggestion is to setup a style guideline. Elecia recommended
 [Google's C/C++ Style Guide](https://google.github.io/styleguide/cppguide.html).
 
 #### Chapter 3: Making your Code Work
+
+Chapter 3 was all about understanding parts, and being able to see inside
+(debug) things when they weren't working. So, this chapter has a couple of big
+points: reading datasheets, understanding your processor, reading a schematic,
+collecting a good set of debugging tools, and testing your system. On top of
+that, Elecia elucidates the general steps of a project.
+
+Most projects start with hardware selection, followed by board layout. This soon
+progresses into hardware tests to verify that all of the connections are
+properly made. Then there is the long cycle of software development work. The
+Gantt chart below elucidates the flow of most embedded projects.
+
+![Gantt Chart of Embeded Systems Development
+]({{site.baseurl}}/assets/img/making_embedded_systems/gantt_chart.png "Gantt
+Chart of Embeded Systems Development")
+
+##### Reading a Datasheet
+
+Elecia lists all of the different parts of a datasheet along with helpful
+insights into what information to watch out for, these include the introductory
+description, the pin descriptions & layout, the schematics, any sample code, the
+performance characterization, and most importantly the application information /
+theory of operation. She also makes a note to look for any errata that the
+distributor may put out to fix previous documentation or device issues.
+Evaluating this list of fields will help determine if a certain peripheral can
+be used and if so, how easy it will be to implement.
+
+##### Understanding a Processor & Reading a Schematic
+
+A processor is the brain of any embedded system, as such, understanding a
+processor can make the difference between a working and a broken project. Elecia
+recommends using the user manual, getting started documentation, forums, and
+datasheet to really get a solid understanding of your processor. Understanding
+the schematic of your board isn't too complicated and boils down to assigning
+meaning to the most connected pieces on the schematic, which tend to be the most
+important.
+
+##### Debugging
+
+A good hardware debugging toolbox is comprised of:
+
+* Needle nose pliers
+* Tweezers
+* Box Cutters
+* DMM (remember only test for resistance when the device is turned off)
+* Electric tape
+* Sharpie
+* Screwdrivers
+* Flashlight
+* Magnifying glass
+* Safety glasses
+* Cable ties
+
+Other extremely useful tools are oscilloscopes and logic analyzers. Elecia
+spends some time discussing how to use them, and their parts; including the time
+scale, voltage scale, and zero-offset.
+
+##### Testing
+
+In this section, Elecia really exposes her wealth of experience with work on
+embedded projects. She notes 3 main types of tests: POST, unit tests, and bring
+up tests. POST tests stands for Power On Self Test, and should be run every time
+on boot to check that everything is connected properly. Unit tests should
+atleast be run at every release, and it is a good idea to try to leave them in
+production for easy debugging. The bring up tests should check specific
+subsystems and are usually one-off / throwaway tests. Elecia uses Flash as a
+good example for tests, including the reading, byte access, and block access of
+flash in her tests.
+
+Having a command and response debugger can also be very helpful for selectively
+running separate functions. Here's a code-snippet of the structure that Elecia
+uses in her debugger.
+
+{% highlight c %}
+typedef void(*functionPointerType)(void);
+struct commandStruct {
+    char const *name;
+    functionPointerType execute;
+    char const *help;
+};
+const struct commandStruct commands[] = {
+    {"ver", &CmdVersion, "Display firmware version"},
+    {"flashTest", &CmdFlashTest, "ReRuns the flash unit test, printing out the number of errors"},
+    {"blinkLed", &CmdBlinkLed, "Sets the LED to blink at a desired rate (parameter: frequency (Hz))"},
+    {"",0,""} //End of table indicator. MUST BE LAST!!!
+};
+{% endhighlight %}
+
+Elecia further recommends the use of an eror handling library with a
+well-defined errors file to know which codes mean what. This library should
+usually set a global error flag, and have an interface comprised of `set`,
+`get`, `print`, and `clear` functions.
+
 #### Chapter 4: I/O & Timers
+
+This chapter starts off by diving right into the use of registers, how that
+extends to memory-mapped IO, and the consequent need for a proficiency in binary
+operations. We then delve into how I/O has different types and directions and
+how it all depends on the vendor. Elecia recommends having a board-specific
+header file which can be selectively included like this:
+
+{% highlight c %}
+// ioMapping.h
+#if COMPILING_FOR_V1
+#include “ioMapping_v1.h”
+#elif COMPILING_FOR_V2
+#include “ioMapping_v2.h”
+#else
+#error “No IO map selected for the board. What is your target?”
+#endif /* COMPILING_FOR_*/
+{% endhighlight %}
+
+Then she describes how different response times feel:
+
+| Sluggish | Good | Snappy |
+| -------- | ---- | ------ |
+| 250 ms   | 100 ms | 50 ms |
+
+We then get into the good stuff, with Elecia describing the differences between
+interrupts and polling. She then implements a neat button debouncer using a
+timer and a filter.
+
+Then the design patterns get into the mix. Elecia compares the __Facade__
+pattern with __Dependency Injection__. __Facade__ reduces complexity by
+simplifying the lower-level interface. With the LED example that she gives, this
+is done by abstracting away the IO interface into the LED code. It makes the LED
+code rely on the IO though. __Dependency Injection__ aims to increase
+flexibility; as an example you'd pass in a IO handler to the LED code, so you
+could do anything when turning it on. This is handy when working with different
+boards, or even for testing, for example you could write to a file instead of
+turning an IO pin on. __Facade__ pattern takes up more space, but __Dependency
+Injection__ can add to the run time, due to the use of function pointers.
+
+Then we take a good look at timers, evaluating their various registers which can
+include: total_time, compare, action, clock, prescale, control, and interrupt.
+Here's a neat algorithm to settle on a pre-scalar & compare value:
+
+{% include figure.html url='/assets/img/making_embedded_systems/timer_algo.png'
+caption='A brute-force algorithm to select compare and prescalers for a timer'%}
+
+Note that the main issues to solve here are the limited width of the register
+and the fact that we're working with integers instead of floats. Elecia then
+makes a lovely transition from the discussion of timers to describing PWMs as 2
+timers.
+
 #### Chapter 5: Task Management
+
 #### Chapter 6: Peripherals
+
 #### Chapter 7: Updating Code
+
 #### Chapter 8: Optimizing Code
+
 #### Chapter 9: Embedded Math
+
 #### Chapter 10: Optimizing Power
 
-### List of Possibly useful references that Elicia mentioned
+### Closing Takeaways for my Future Work
+
+### List of Possibly useful references that Elecia mentioned
 
 * [Design Patterns: Elements of Reusable Object-oriented
   Software](https://www.goodreads.com/book/show/85009.Design_Patterns)
@@ -166,5 +316,3 @@ specifically Vol. 2 for the great algorithms
   Earthlings](http://www.amazon.com/There-Are-Electrons-Electronics-Earthlings/dp/0962781592)
 * [MSP430 Coding Techniques App
   Report](http://www.ti.com/lit/an/slaa294a/slaa294a.pdf)
-
-### Closing Takeaways for my Future Work
