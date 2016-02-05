@@ -256,6 +256,93 @@ timers.
 
 #### Chapter 5: Task Management
 
+Elecia prefaces this chapter by stating that chapter 2 was the _what_/_why_ of
+design and this is the _how_.
+
+##### OS
+
+We start off fast by diving right into operating
+systems, and distinguishing between __tasks__, __threads__, and __processes__.
+We then get into scheduling and communication between threads (Elecia uses
+globals). We establish separation of __critical sections__ via mutexes, which
+can, at their very simplest, disable interrupts. She has a view on semaphores,
+that I haven't seen before, she refers to them as such:
+
+> Operating systems have heavier weight mutexes called semaphores that
+can handle situations where a thread or process can be preempted (for-
+cibly changed by the scheduler).
+
+I've only ever dealt with semaphores that are used as an alternative to mutexes
+and are usually better for signaling between producers and consumers, but don't
+take my word for it. Make sure that when you're in your __ISR__ that you finish
+quickly. Elecia also gets into why we need priority inversion and how it works.
+
+{% include figure.html url='/assets/img/making_embedded_systems/priority_inv.png'
+caption='Priority Inversion'%}
+
+##### FSM
+
+Elecia then gets into __Finite State Machines__ which, put very simply allow a
+change of behavior when the state changes. It usually is implemented with a
+switch statement, you can separate this `next_state` utility into a function.
+Alternatively, it can be event-centric. These usually need 5 functions to use
+for each state: `enter`, `exit`, `go`, `stop`, `periodic_housekeeping`; `go` and
+`stop` are implementation specific event handlers, there could be many more of
+these event handlers, but her example is a stoplight, so these handlers make
+sense. Alternatively you can use a table to keep track of your FSM, in it you
+have a pointer to what do to do in a `go`, `stop`, and `timeout` situation as
+well as a `light` that's associated with that state. Then there are global
+handlers that call the necessary functions when they are required.
+
+##### Interrupts
+
+Once an interrupt occurs a very particular set of steps takes place:
+
+1. IRQ
+2. Save Context
+3. Go to the IVT (Interrupt Vector Table) for the Callback
+4. Execute the Callback
+5. Restore the Context (Elecia, didn't mention this, as it's often take care of
+   by the compiler, as is #2
+
+She quickly makes a distinction between a normal interrupt and an exception. The
+use of separate set & clear registers is shown to prevent interrupt issues since
+you don't have to read any register to clear / set a bit. There's also a quick
+reminder about setting global interrupts. There's a quick discussion about
+interrupt priority and nested interrupts. Elecia recommends staying away from
+nested interrupts, and I must say that I agree with her. Interrupt latency is
+taken into consideration, as an overall metric of the processor.
+
+Functions called from the IRQ must be __reentrant__, which means that they can
+be run multiple times without being complete; this makes most functions that
+use global state __non-reentrant__. There's a good example of where the vector
+table is located in the LPC17xx:
+
+{% highlight c %}
+
+__attribute__ ((section(".isr_vector")))
+void (* const g_pfnVectors[])(void) = {  // * markdown fix
+    // Core Level - CM3
+    &_vStackTop,
+    // The initial stack pointer
+    ResetISR,
+    // The reset handler
+    NMI_Handler, // The NMI handler
+    ...
+    TIMER2_IRQHandler, // 19, 0x4c - TIMER2
+    TIMER3_IRQHandler, // 20, 0x50 - TIMER3
+    UART0_IRQHandler, // 21, 0x54 - UART0
+    ...
+}
+{% endhighlight %}
+
+There's a useful hint about saving the interrupt status when you disable it, so
+that when you re-enable you don't accidentally turn it on, when they were
+already off. The concept of a __system tick__ is explained and the reader is
+made aware of it's necessity in any scheduler. A small pseudo-scheduler is
+explained that uses a pub/sub model. Then the concept of a watchdog is
+explained, noting its ability to greatly increase the robustness of a system.
+
 #### Chapter 6: Peripherals
 
 #### Chapter 7: Updating Code
