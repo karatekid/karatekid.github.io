@@ -51,4 +51,4 @@ image: tdd_embedded_c/cover.jpg
 
 ### List of Possibly useful references that they mentioned
 
-* []()
+* {% include book_reference.html name='xp_explained' %}

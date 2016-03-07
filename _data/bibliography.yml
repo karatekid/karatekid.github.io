@@ -1,0 +1,129 @@
+xp_explained:
+  title: 'Extreme Programming Explained: Embrace Change'
+  author: 'Kent Beck'
+  year: 2000
+  link: 'http://www.amazon.com/Extreme-Programming-Explained-Embrace-Edition/dp/0321278658'
+
+tdd_by_example:
+  title: 'Test Driven Development: By Example'
+  author: 'Kent Beck'
+  year: 2002
+  link: 'http://www.amazon.com/Test-Driven-Development-By-Example/dp/0321146530'
+
+humble_programmer:
+  title: 'The Humble Programmer'
+  author: 'Edsger W. Dijkstra'
+  year: 1972
+  link: 'https://www.cs.utexas.edu/~EWD/transcriptions/EWD03xx/EWD340.html'
+
+refactoring:
+  title: 'Refactoring: Improving the Design of Existing Code'
+  author: 'Martin Fowler, Kent Beck, et al.'
+  year: 1999
+  link: 'http://www.amazon.com/Refactoring-Improving-Design-Existing-Code/dp/0201485672'
+
+working_w_legacy_code:
+  title: 'Working Effectively with Legacy Code'
+  author: 'Michael Feathers'
+  year: 2004
+  link: 'http://www.amazon.com/Working-Effectively-Legacy-Michael-Feathers/dp/0131177052'
+
+design_patterns:
+  title: 'Design Patterns: Elements of Reusable Object-Oriented Software'
+  author: 'Erich Gamma, Richard Helm, et al.'
+  year: 1995
+  link: 'http://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612'
+
+art_designing_embedded:
+  title: 'The Art of Designing Embedded Systems'
+  author: 'Jack Gannsle'
+  year: 2000
+  link: 'http://www.amazon.com/Designing-Embedded-Systems-Second-Edition/dp/0750686448'
+
+prog_b4_hw:
+  title: 'Progress Before Hardware'
+  author: 'James W. Grenning'
+  year: 2004
+  link: 'https://www.jamesgrenning.com/papers/ProgressBeforeHardware.pdf'
+
+embedded_tdd_cycle:
+  title: 'Embedded Test Driven Development Cycle'
+  author: 'James W. Grenning'
+  year: 2004
+
+apply_tdd_to_embedded_sw:
+  title: 'Applying Test Driven Development to Embedded Software'
+  author: 'James W. Grenning'
+  year: 2007
+
+pragmatic_programmer:
+  title: 'The Pragmatic Programmer: From Journeyman to Master'
+  author: 'Andrew Hunt & David Thomas'
+  year: 2000
+  link: 'http://www.amazon.com/The-Pragmatic-Programmer-Journeyman-Master/dp/020161622X'
+
+scaling_agile_dev:
+  title: 'Scaling Lean & Agile Development'
+  author: 'Craig Larman & Bas Vodde'
+  year: 2009
+  link: 'http://www.amazon.com/Scaling-Lean-Agile-Development-Organizational/dp/0321480961'
+
+program_w_abstract_dt:
+  title: 'Programming with Abstract Data Types'
+  author: 'Barbara Liskov'
+  year: 1974
+  link: 'http://dl.acm.org/citation.cfm?id=807045&dl=ACM&coll=DL&CFID=759531049&CFTOKEN=36663829'
+
+data_abstraction_hierarchy:
+  title: 'Data Abstraction & Hierarchy'
+  author: 'Barbara Liskov'
+  year: 1988
+  link: 'http://www.rendezvouswithdestiny.net/index_files/LiskovSub.pdf'
+
+endo_testing:
+  title: 'Endo-Testing: Unit Testing with Mock Objects'
+  author: 'Tim MacKinnon, Steve Freeman, & Philip Craig'
+  year: 2001
+  link: 'http://www.ccs.neu.edu/research/demeter/related-work/extreme-programming/MockObjectsFinal.PDF'
+
+agile_sw_dev:
+  title: 'Agile Software Development, Principles, Patterns, and Practices'
+  author: 'Robert C. Martin'
+  year: 2002
+  link: 'http://www.amazon.com/Software-Development-Principles-Patterns-Practices/dp/0135974445'
+
+clean_code:
+  title: 'Clean Code: A Handbook of Agile Software Craftsmanship'
+  author: 'Robert C. Martin'
+  year: 2008
+  link: 'http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882'
+
+xunit_test_patterns:
+  title: 'xUnit Test Patterns'
+  author: 'Gerard Meszaros'
+  year: 2007
+  link: 'http://www.amazon.com/xUnit-Test-Patterns-Refactoring-Code/dp/0131495054'
+
+oo_sw_construction:
+  title: 'Object-Oriented Software Construction'
+  author: 'Bertrand Meyer'
+  year: 1997
+  link: 'http://www.amazon.com/Object-Oriented-Software-Construction-CD-ROM-Edition/dp/0136291554'
+
+agile_in_flash:
+  title: 'Agile in a Flash'
+  author: 'Tim Ottinger & Jeff Langr'
+  year: 2011
+  link: 'http://www.amazon.com/Agile-Flash-Speed-Learning-Development-Programmers/dp/1934356719'
+
+taming_embedded_tiger:
+  title: 'Taming the Embedded Tiger: Agile Test Techniques for Embedded Software'
+  author: 'Nancy Van Schooenderwoert & Ron Morsicato'
+  year: 2004
+  link: 'http://www.goodagile.com/public/embeddedscrum/4-Taming_Embedded_Tiger.pdf'
+
+keys_to_great_writing:
+  title: 'Keys to Great Writing'
+  author: 'Stephne Wilbers'
+  year: 2000
+  link: 'http://www.amazon.com/Keys-Great-Writing-Stephen-Wilbers/dp/1582974926'
