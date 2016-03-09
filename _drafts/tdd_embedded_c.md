@@ -51,4 +51,22 @@ image: tdd_embedded_c/cover.jpg
 
 ### List of Possibly useful references that they mentioned
 
+* {% include book_reference.html name='art_designing_embedded' %}
+* {% include book_reference.html name='tdd_by_example' %}
+* {% include book_reference.html name='refactoring' %}
+* {% include book_reference.html name='xunit_test_patterns' %}
+* {% include book_reference.html name='program_w_abstract_dt' %}
+* {% include book_reference.html name='agile_sw_dev' %}
+* {% include book_reference.html name='agile_in_flash' %}
+* {% include book_reference.html name='pragmatic_programmer' %}
+* {% include book_reference.html name='taming_embedded_tiger' %}
+* {% include book_reference.html name='working_w_legacy_code' %}
+* {% include book_reference.html name='endo_testing' %}
+* {% include book_reference.html name='agile_sw_dev' %}
+* {% include book_reference.html name='data_abstraction_hierarchy' %}
+* {% include book_reference.html name='oo_sw_construction' %}
+* [Extreme Programming Rules of Simple Design](http://c2.com/xp/XpSimplicityRules.html)
+* {% include book_reference.html name='refactoring' %}
+* {% include book_reference.html name='clean_code' %}
+* {% include book_reference.html name='scaling_agile_dev' %}
 * {% include book_reference.html name='xp_explained' %}
