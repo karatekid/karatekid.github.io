@@ -262,6 +262,7 @@ runners.
 
 Create a big visible chart __BVC__ to track various factors of your code e.g.
 flash size, ram, etc.
+{% include figure.html url='/assets/img/tdd_embedded_c/bvc.jpg' caption='Big Visible Chart'%}
 
 Isn't simulating hardware difficult? It is, that's why we mock things and merely
 simulate the interaction, not the entire system.
