@@ -178,9 +178,82 @@ Also try to keep your tests following the __F.I.R.S.T__ methodology:
 
 #### Chapter 4: Testing your Way to Done
 
+Chapter 4 is basically a walkthrough TDD, showing a detailed example of what the
+various steps are. Here are a couple of tidbits I gleaned from reading through
+it. When refactoring don't break anything, copy / paste, don't cut / paste. Once
+everything is in place then substitute your change. Once tests are passing,
+remove the old code and if tests still pass you're all set! During this section
+James makes use of a __stub__, a test version of a production function that
+gives us insight into what was passed into that function, for example we can get
+information on what was logged, etc. Also note that once an error get's
+introduced during TDD just undo to debug, since you just added the faulty code
+you can very quickly see what went wrong.
+
 #### Chapter 5: Embedded TDD Strategy
 
+Chapter 5 is the most relevant chapter to embedded systems development and
+discusses how to keep the software and hardware in working order. James
+recognizes that testing on hardware can be expensive in time and other factors.
+Since you usually don't have your target hardware for some time, it's usually a
+good idea to get an evaluation board for your processor, this reduces the number
+of unknowns and can allow you to start working on hardware before you get the
+eventual target.
+
+Dual-targeting is an important concept when working with TDD on embedded
+systems. You want to be able to run most modules on the target platform, your
+evaluation board, and your development setup. You'll be doing a lot of upfront
+verification on the development system, but you obviously want to ensure that
+everything works on the other platforms. Dual-targeting allows us to keep this
+need forefront in our minds durnig development.
+
+During development follow the embedded TDD cycle:
+
+1. The standard TDD micro cycle - every save
+2. Compiler Compatibility check - every commit
+3. Run unit tests on eval board - every day
+4. Run unit tests on target board - every day
+5. Run manual acceptance tests on target board - hardware or hardware code
+   change
+
+{% include figure.html url='/assets/img/tdd_embedded_c/embedded_tdd_cycle.jpg' caption='Embedded TDD Cycle'%}
+
+When setting up a system for separate targets you could take a couple of
+different approaches. You could use: 
+
+* conditional compilation (ugly, hard to understand)
+* platform specific header files (use `#define` to define functions differently)
+* platform specific implementation directories (the __best__ answer). This is an
+  __adapter pattern__.
+
+Automated hardware tests should find any language construct differences, memory
+issues, and misunderstanding of hardware. They must also be automatically
+verified.
+
+The manual acceptance tests should have some sort of command terminal to
+communicate with the hardware to trigger tests and get the expected result. You
+can also have long / short tests, running them with varying frequencies. You can
+also use external instruments to test, such as a function generator.
+
 #### Chapter 6: Excuses & Problems with TDD
+
+Chapter 6 reads like a FAQ or troubleshooting guide for TDD enumerating various
+peoples' problems with TDD in the embedded world and then addressing them. I'll
+highlight a couple of the interesting ones.
+
+Single-step and hardware debugging are very slow try to avoid it, guess what TDD
+helps avoid it.
+
+What about testing after development (TAD)? TDD is more about than development,
+while TAD is all about testing, doesn't have as immediate of feedback, and
+doesn't get as much coverage.
+
+TDD doesn't find all bugs. While this is true, it does find a lot of them and
+really helps during development. You obviously still need these test types:
+
+* integration
+* acceptance (fulfill requirements)
+* exploratory
+* load & performance (explore limits)
 
 ### Testing Modules with Collaborators
 
