@@ -255,6 +255,17 @@ really helps during development. You obviously still need these test types:
 * exploratory
 * load & performance (explore limits)
 
+TDD causes long build times. Well, try modularizing your builds.
+
+TDD is too memory intensive on HW. Use a small harness, break into multiple
+runners.
+
+Create a big visible chart __BVC__ to track various factors of your code e.g.
+flash size, ram, etc.
+
+Isn't simulating hardware difficult? It is, that's why we mock things and merely
+simulate the interaction, not the entire system.
+
 ### Testing Modules with Collaborators
 
 #### Chapter 7: Introducing Test Doubles
