@@ -556,6 +556,10 @@ Complexity__: the number of paths through a function.
 * Separate ideas when they are stuck together.
 * You can also use `#define` to quickly swap between the old and new code when
   trying to get the new code working.
+* Move functions to areas where they are more central and operate on more
+  standard sets of data.
+* Split the source file into multiple .c files when segregating common
+  functionalities from platform specific ones.
 
 James notes that a lot of people complain to him about the added overhead of
 these designs to their code, especially in embedded systems. He quotes Knuth,
@@ -563,6 +567,50 @@ saying that you shouldn't perform unecessary optimizations until you have a
 reason to.
 
 #### Chapter 13: Adding Tests to Legacy Code
+
+When dealing with legacy code, adding tests can get pretty difficult, following
+these policies and best practices can help a lot.
+
+General Policy:
+
+1. Test drive new code
+2. Add test to old code before modifying it, this can _sprout_ new functions
+   into old calls
+3. Test-drive any changes
+
+Use the 'Boy Scout Principle', "Leave it better than you found it." When
+operating on code that has smells like you saw in the previous chapter try
+fixing. Instead of copy/pasting make a helper function. Rename poorly named
+variables.
+
+Legacy Change Algorithm:
+
+1. Identify change points
+2. Find how to test the points found in (1)
+3. Break dependencies if you need to, to access the test points found in (2)
+4. Write tests
+5. Make changes and refactor
+
+Test points come in all shapes and sizes, there are:
+
+* __Seams__: Function calls, in really big functions you can add sensing
+  variables to determine certain information.
+* __Global Variables__: If some already exist, use them.
+* __Sensing Variables__: Used to access deep into large functions
+* __Debug Output Sense__: Use a spy to get debug output to confirm things
+* __Inline Monitor__: The more general case of the debug output sense point,
+  this encompasses all means of reporting information inside of methods, it can
+  also allow checks to be made while tests are running.
+
+Sometimes globally accessible structures need 2 initialization stages, add them
+when you must.
+
+When getting these tests to run 'Crash to Pass', make it compile then link the
+find the dependencies and fix.
+
+You can also create characterization tests that just characterize some of the
+functionality of the old code. You can also use tests to learn about the
+interface of the old code.
 
 #### Chapter 14: Test Patterns & Antipatterns
 
