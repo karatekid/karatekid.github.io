@@ -269,7 +269,53 @@ simulate the interaction, not the entire system.
 
 ### Testing Modules with Collaborators
 
+> A __collaborator__ isn't someone that you work with, it's any function, data, or
+module that is outside the code under test __CUT__ that the CUT depends upon.
+
 #### Chapter 7: Introducing Test Doubles
+
+As the excerpt above states, the segments of code that we test often have
+__collaborators__ and we must deal with those collaborators properly when we
+test code. We can impersonate these collaborators with __test doubles__. These
+impersonate the collaborators and allow us to send special values to the CUT and
+ensure that the collaborators are getting passed the proper input. To be able to
+make these test doubles our design has to have well defined interfaces between
+modules, without them it's hard to know what we're trying to impersonate. An
+illustration of the place for test doubles is given below:
+
+{% include figure.html url='/assets/img/tdd_embedded_c/test_dependency.jpg' caption='Typical Dependencies of CUT'%}
+{% include figure.html url='/assets/img/tdd_embedded_c/test_doubles.jpg' caption='Impersonating Collaborators with Test Doubles'%}
+
+The best times to use test doubles are when you want to:
+
+* Gain Hardware Independence
+* Inject Difficult to Produce / Rare Inputs
+* Speed up Collaborators
+* Stop Depending on Volatile Collaborators (e.g. Clocks)
+* Work with something that isn't fully Developed
+
+To create these test doubles you generally have 4 options:
+
+1. Linker Substitution: You replace the collaborator for the whole executable.
+   For example, you'd use this for a hardware test double.
+2. Function * Substitution: You replace the collaborator for only some of the
+   test cases.
+3. Preprocessor Substitution: You can override certain functions with the
+   preprocesor, e.g. changing `malloc`, this changes the actual code though and
+   is recommended against.
+4. Combine link-time and function * substitution: The linker initializes a
+   function * to `NULL`, but each test sets the function * to what they need.
+
+There are various types of test doubles, here are a few:
+
+| Name | Description |
+| ---- | ----------- |
+| Test Dummy | Satisfy the compiler / linker, but never used |
+| Exploding Fake | Dummy + makes test fail if called |
+| Test Stub | Dummy + return a value described by the test case |
+| Test Spy | Stub + capture parameters passed in so test can verify |
+| Mock Object | Verifies functions called, call order, and parameters passed, while returning specific values to the CUT |
+| Fake Object | Partial implementation, to return different values depending on the input |
 
 #### Chapter 8: Spying on Production Code
 
