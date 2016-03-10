@@ -11,10 +11,18 @@ image: tdd_embedded_c/cover.jpg
 
 ### Initial Thoughts
 
+I enjoyed this book. It clearly demonstrated the usefulness of TDD and what is
+more it layed out a clear way to start performing TDD in C. This book may have
+wandered every once in a while, but it kept true to its course and even taught
+some interesting C constructs along the way.
+
 ### Book Layout
 
 The book is layed out into the getting started section where you get used to the
-tools and conventions of TDD, then in
+tools and conventions of TDD, then in the testing with collaborators section you
+see how to mimic other devices to enable testing even when you have external
+dependencies. The last section deals mostly with design and lends some good C
+design practices.
 
 ### Chapter 1: Test-Driven Development
 
@@ -636,6 +644,7 @@ is often referred to as _giveWenZen_.
 
 * Should I have a section on design in my book?
 * Make an example of these testing frameworks.
+* He had exercises at the end of his chapters, should I?
 * Maybe I should think about _Pragmatic Programmer_ as a publisher?
 * I Should probably read an Arduino & a PI book for reference.
 * Use `enum`, `const`, or `#define` for constants?
