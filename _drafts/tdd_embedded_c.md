@@ -13,6 +13,9 @@ image: tdd_embedded_c/cover.jpg
 
 ### Book Layout
 
+The book is layed out into the getting started section where you get used to the
+tools and conventions of TDD, then in
+
 ### Chapter 1: Test-Driven Development
 
 The first chapter is a fairly straight forward introduction that fleshes out
@@ -613,6 +616,21 @@ functionality of the old code. You can also use tests to learn about the
 interface of the old code.
 
 #### Chapter 14: Test Patterns & Antipatterns
+
+While making tests, you can make poor design decisions. Avoid these test
+antipatterns:
+
+| Antipattern | Resolution |
+| ----------- | ---------- |
+| Ramble-on test | It's ok to repeat a little setup for each test |
+| Copy-paste-tweak repeat | Use helper functions |
+| Sore thumb | make separate groups when you need to |
+| Duplication between groups | Use a separate helpers file |
+| Test disrespect | don't work in a group where people disrespect tests |
+
+One test pattern is _Behavior Driven Development_, which tries to make things
+more explicit with a format like this: `given x when y then z`. This methodology
+is often referred to as _giveWenZen_.
 
 ### Closing Takeaways for my Future Work
 
