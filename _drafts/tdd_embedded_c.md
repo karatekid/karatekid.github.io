@@ -509,6 +509,59 @@ As a final note for design, the author espouses the XP rules of design:
 
 #### Chapter 12: Refactoring
 
+This chapter is all about refactoring. To refactor well you need these 3
+critical skills:
+
+1. Nose for Bad Code
+2. Vision of Better Code
+3. Transform the Code
+
+##### Code Smells
+
+James lists a bunch of code smells, here you are:
+
+| Problem | Possible Fix |
+| ------- | ------------ |
+| Duplicate Code | |
+| Bad Names | |
+| Bad pasta (integration) | |
+| Long functions | Make it short enough to fit into your working memory |
+| Abstraction Distraction | Keep a consistent level of abstraction in a function, hide small details |
+| Bewildering Boolean | Abstract conditionals into functions |
+| Switch / Case disgrace | Too much logic in the case statements, just use it for channeling |
+| Duplicate switch / case | Not following __OCS__, use it |
+| Nefarious Nesting | Abstract big nests into functions |
+| Feature Envy | Too many things using 1 object |
+| Long Param List | Use structs |
+| Willy Nilly Init | Create explicit `init` functions |
+| Global free for all | Keep data structures hidden and use `init` |
+| Comments | Only use them as excuses, hopefully your code self-documents |
+| Commented-out code | Delete it, your source control will keep it around if you need it again |
+| Conditional Compilation | This should be your last choice, ideally use the linker or function * s. |
+
+James's description of code pasta really intrigued me. He said that pasta code
+can be more than spaghetti (all loose and jumbled with too many ill-defined
+connections, it can also be ravioli (small modules loosely coupled by weak
+sauce) or lasagna (well-layered). Spaghetti is known for its high __Cyclomatic
+Complexity__: the number of paths through a function.
+
+##### Transforming the Code
+
+* When transforming the code, you need to get a vision for what a better version
+  would look like; using comments is often very helpful.
+* Then evaluate the function signatures to figure out what should be passed
+  around.
+* Remember don't burn bridges while making changes.
+* Remove the duplication.
+* Separate ideas when they are stuck together.
+* You can also use `#define` to quickly swap between the old and new code when
+  trying to get the new code working.
+
+James notes that a lot of people complain to him about the added overhead of
+these designs to their code, especially in embedded systems. He quotes Knuth,
+saying that you shouldn't perform unecessary optimizations until you have a
+reason to.
+
 #### Chapter 13: Adding Tests to Legacy Code
 
 #### Chapter 14: Test Patterns & Antipatterns
@@ -517,6 +570,8 @@ As a final note for design, the author espouses the XP rules of design:
 
 * Should I have a section on design in my book?
 * Make an example of these testing frameworks.
+* Maybe I should think about _Pragmatic Programmer_ as a publisher?
+* I Should probably read an Arduino & a PI book for reference.
 * Use `enum`, `const`, or `#define` for constants?
 
 ### List of Possibly useful references that they mentioned
