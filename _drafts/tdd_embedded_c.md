@@ -170,11 +170,11 @@ else. Follow the TDD state machine during development.
 
 Also try to keep your tests following the __F.I.R.S.T__ methodology:
 
-* F - Fast
-* I - Isolated
-* R - Repeatable
-* S - Self-verifying
-* T - Timely
+* __F__ - Fast
+* __I__ - Isolated
+* __R__ - Repeatable
+* __S__ - Self-verifying
+* __T__ - Timely
 
 #### Chapter 4: Testing your Way to Done
 
@@ -319,13 +319,193 @@ There are various types of test doubles, here are a few:
 
 #### Chapter 8: Spying on Production Code
 
+In chapter 8, James gives us a good example of setting up a couple of test
+doubles to test out a light scheduler. The light scheduler design and the
+consequent test design are shown below:
+
+{% include figure.html url='/assets/img/tdd_embedded_c/initial_light_scheduler.jpg' caption='Initial Light Scheduler Design'%}
+{% include figure.html url='/assets/img/tdd_embedded_c/test_light_scheduler.jpg' caption='Test Structure for the Light Scheduler'%}
+
+The test doubles fit in very well, another nice part about these tests is that
+they help make good abstractions for the various interfaces thus making the
+overall design that much cleaner. James uses link time substitution to create
+these tests. Also, note that you should add some tests that help highlight the
+use of these doubles, not so much to test them (very little can go wrong with
+them) but to show an example of the fake's interface.
+
+In the header file of the spy include the header of the spied interface.
+
+An interesting point that he stresses is to follow the __0 --> 1 --> N__ policy.
+This means that when developing get the case where nothing is happening working,
+then try getting the case of 1 thing happening to work, and then move on to more
+than 1. Don't be afraid to simplify your approach when starting off, then
+increasing complexity. Just make sure that when you increase complexity that you
+don't burn bridlges until you've gotten the new code working. There's some
+pretty good source code in this chapter,
+[check it out here](https://github.com/jwgrenning/tddec-code/tree/master/code/tests/HomeAutomation).
+
 #### Chapter 9: Runtime-Bound Test Doubles
 
+While the previous chapter uses link-time substitution during test creation,
+this chapter deals more with using function pointers. An example of how to set
+this up follows:
+
+{% highlight c %}
+// .h file
+extern int (*DoSomething) (void);
+
+// .c file
+int DoSomething_Impl(void) {
+    return 2;
+}
+int (*DoSomething) (void) = DoSomething_Impl;
+{% endhighlight %}
+
+During testing you can set this function pointer with your own functions, you
+usually save it, change it, and restore it. CppUTest has a macro to do this
+calld `UT_PTR_SET`. Using function pointers is quite powerful, but try to use
+them sparingly since link time changes are usually cleaner and the pointers can
+add an unecessary layer of complexity.
+
+[Check out the source code](https://github.com/jwgrenning/tddec-code/tree/master/code/tests/util).
+
 #### Chapter 10: The Mock Object
+
+During this chapter James describes the use of __Mock Objects__, extremely
+helpful test doubles that can be used to verify calls performed on an interface,
+along with generating specific output. These mock objects are not simulators,
+but can allow for simulations of various scenarios one at a time.
+
+James chooses to mock a [ST 16 Mb Flash Device](https://www.micron.com/~/media/documents/products/data%20sheet/nor%20flash/parallel/m28w/m28w160ec.pdf).
+How he sets up the mock is illustrated below.
+
+{% include figure.html url='/assets/img/tdd_embedded_c/flash_mock.jpg' caption='Mocking a Flash Driver'%}
+
+This mock mocks the communication to the peripheral from the processor and is
+known as `MockIO`, it implements 3 additional functions apart from the defined
+interface and its own `create` and `destroy` functions:
+
+{% highlight c %}
+MockIO_Expect_Write(ioAddress offset, ioData data);
+MockIO_Expect_ReadThenReturn(ioAdress offset, ioData returnData);
+MockIO_Verify_Complete(void);
+{% endhighlight %}
+
+The `expect_write` function is straightforward enough, while the
+`ReadThenReturn` offers the super useful ability of telling the test code what
+it is going to get back. The `verify_complete` command simply makes sure that
+there are no further expectations. This mock enables us to also try out very
+rare failures in the driver and ensure we take the proper response to them.
+
+Note that he didn't mock the device, but the IO line, allowing each test case to
+specify only what it needed to mock the hardware in that situation.
+[Check out the source code](https://github.com/jwgrenning/tddec-code/tree/master/code/tests/IO).
+
+##### Mock Generators
+
+Mock generators reduce the duplication necessary between mocks.
+
+[CppUMock](http://cpputest.github.io/mocking_manual.html) is a part of CppUTest
+that supports a very generalized mock using the niceties of C++. It does not
+enforce ordering however, which can be a problem in certain situations like the
+flash driver.
+
+[CMock](http://www.throwtheswitch.org/cmock) is a sibling of Unity that actually
+generates code that conform to a specified interface header file. It generates
+most of the code that you'll need and you can customize the generated .c file as
+you see fit. You definitely have to do more writing than in CppUMock, but
+everything stays in C.
 
 ### Design & Continuous Improvement
 
 #### Chapter 11: SOLID, Flexible, & Testable Designs
+
+This chapter comes a little out of left field, design talk in a book about
+testing, what? James justifies this mishmash by pointing out that testing drives
+good design and offers some useful advice.
+
+James talks about S.O.L.I.D design principles, they follow:
+
+* __S__ - Single Responsibility, do 1 job and do it well
+* __O__ - Open Closed, open to extension & closed to modification
+* __L__ - Liskov Substitution, have semantically replaceable servers
+* __I__ - Interface Segregation, tailor your interfaces to the client
+* __D__ - Dependency Inversion, depend on the abstractions, not the details
+
+James then dives into advanced C constructs for supporting these design
+principles. All of these constructs use __S__ and __D__, the last two show how
+to use __O__ and __L__.
+
+* Single-instance module - hide internal state when only 1 instance
+* Multiple-instance module - hide internal state with > 1 instance
+* Dynamic interface - allow interface functions to be assigned at runtime
+* Per-type dynamic interface - allow > 1 type of module with identical interface
+  to have unique functions
+
+The single and multiple instance modules are nothing new and just involve hiding
+the struct declaration in the .c file and the defintion in the .c file
+respectively. As projects change we must adapt and allow interface functions to
+be defined during runtime this leads to the desire for __polymorphism__.
+
+##### Polymorphism in C
+
+Polymorphism is used in C++ for classes to have the same interface with
+different implementations (for the most part). We can create polymorphism in C
+by using a base struct as the first field in other structs. Thus we can pass
+pointers to the `GenericStruct` around and then in the separate structs we can
+automatically cast those `GenericStruct` pointers to their own type.
+
+{% highlight c %}
+typedef enum Type {
+    Type1,
+    Type2
+} Type;
+
+typedef struct GenericStruct {
+    Type type;
+    int id;
+} GenericStruct;
+
+// specific.c
+typedef SpecificStruct * Specfic;
+typedef SpecificStruct {
+    GenericStruct base;
+    int additionalField;
+} SpecificStruct;
+{% endhighlight %}
+
+We could call these functions with a huge case statement based on the `type` of
+the struct, but to maintain an __Open Closed__ system we can do better. A
+dynamic interface allows us to fix this.
+
+##### Dynamic Interfaces
+
+When we define an interface, we can specify a struct or 'table' of function
+pointers as such:
+
+{% highlight c %}
+// GenericPrivate.h (Private so people ignore)
+typedef struct GenericInterfaceStruct {
+    void (*DoStuff)(Generic);
+} GenericInterfaceStruct;
+{% endhighlight %}
+
+In a single dynamic interface, you can have one main interface that gets
+configured at run time. Then the calls on the generic struct merely call the
+interface defined functions. To get even more dynamic you can create a per-type
+dynamic interface by allowing a table of function pointers to live in the base
+class. Each specific struct sets that table on initialization. This is the same
+concept that C++ uses to resolve virtual functions, these tables are known as
+__vtables__.
+
+[Check out the source here](https://github.com/jwgrenning/tddec-code/blob/master/code-t2/src/devices/LightDriver.c).
+
+As a final note for design, the author espouses the XP rules of design:
+
+1. Runs all the tests
+2. Expresses every idea
+3. Says everything only once
+4. Has no superfluous parts
 
 #### Chapter 12: Refactoring
 
@@ -334,6 +514,10 @@ There are various types of test doubles, here are a few:
 #### Chapter 14: Test Patterns & Antipatterns
 
 ### Closing Takeaways for my Future Work
+
+* Should I have a section on design in my book?
+* Make an example of these testing frameworks.
+* Use `enum`, `const`, or `#define` for constants?
 
 ### List of Possibly useful references that they mentioned
 
