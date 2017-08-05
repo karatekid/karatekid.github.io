@@ -10,7 +10,7 @@ markdown: kramdown
 redcarpet:
     extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "with_toc_data"]
 highlighter: rouge
-gems: [jekyll-paginate, jekyll-gist]
+plugins: [jekyll-paginate, jekyll-gist]
 paginate: 5
 
 navigation:
@@ -27,7 +27,7 @@ navigation:
 
 social:
    github: karatekid
-   twitter: 
+   twitter:
    facebook: michael.d.christen
    email: mchristen96@gmail.com
 
