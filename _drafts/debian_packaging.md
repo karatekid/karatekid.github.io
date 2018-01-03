@@ -31,3 +31,17 @@ case and if you have 2 services, only 1 really needs to be isolated.
     dev-branch
   * + You can do all of your static asset compilation ahead of time
   * - Our current setting configuration probably wouldn't play well with this
+
+## [Debian New Maintainer's Guide](https://www.debian.org/doc/manuals/maint-guide/index.en.html)
+
+### 1) Getting Started
+
+Use [Guide for Debian Maintainers](https://www.debian.org/doc/manuals/debmake-doc/index.en.html)
+
+## [Guide for Debian Maintainers](https://www.debian.org/doc/manuals/debmake-doc/index.en.html)
+
+Use [Quick Reference](https://www.debian.org/doc/user-manuals#quick-reference),
+particularly [Debian Package
+Management](https://www.debian.org/doc/manuals/debian-reference/ch02.en.html).
+
+## [Quick Reference](https://www.debian.org/doc/user-manuals#quick-reference)
