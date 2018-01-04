@@ -45,3 +45,8 @@ particularly [Debian Package
 Management](https://www.debian.org/doc/manuals/debian-reference/ch02.en.html).
 
 ## [Quick Reference](https://www.debian.org/doc/user-manuals#quick-reference)
+
+## Python References:
+
+[Python Policy](https://www.debian.org/doc/packaging-manuals/python-policy/)
+[Python Library Style Guide](https://wiki.debian.org/Python/LibraryStyleGuide)
