@@ -46,7 +46,177 @@ Management](https://www.debian.org/doc/manuals/debian-reference/ch02.en.html).
 
 ## [Quick Reference](https://www.debian.org/doc/user-manuals#quick-reference)
 
+* [Intro to Debian Packaging](https://wiki.debian.org/Packaging/Intro?action=show&redirect=IntroDebianPackaging)
+
+* [How to Package for Debian](https://wiki.debian.org/HowToPackageForDebian)
+* [Packaging Tutorial](https://www.debian.org/doc/manuals/packaging-tutorial/packaging-tutorial.en.pdf)
+* [Single Binary Package Building](http://tldp.org/HOWTO/html_single/Debian-Binary-Package-Building-HOWTO/)
+
+Neat way of building a package from source
+```bash
+apt-get source foo
+cd foo-0.0.1
+sudo apt-get build-dep foo
+debuild -i -us -uc -b
+```
+
 ## Python References:
 
 [Python Policy](https://www.debian.org/doc/packaging-manuals/python-policy/)
 [Python Library Style Guide](https://wiki.debian.org/Python/LibraryStyleGuide)
+
+## `dh`
+
+Runs specific set of commands. Pass `--no-act` and `--verbose` to `dh` in
+debian/rules.
+
+## Debian package contents
+
+Inside of `ar` directory
+
+```
+some_pkg.deb
+├── debian-binary  - Version of deb file format
+├── control.tar.gz - Control md5sums [pre|post](rm|inst), triggers, shlibs
+└── data.tar.gz    - Data files of the package
+```
+
+
+## `debian/` Directory Layout
+
+Main files
+```
+debian
+├── control
+├── rules
+├── copyright
+└── changelog
+```
+
+Extra files
+```
+debian
+├─ compat
+├─ watch
+├─ dh_install* targets (*.dirs, *.manpages, *.docs)
+├─ Maintainer Scripts ([post|pre](inst|rm))
+├─ Patches/
+└── source
+    └── format
+```
+
+### changelog
+
+#### Version Breakdown
+
+1.2.1.1-5
+* 1.2.1.1 Upstream Version
+* 5 Debian revision
+
+Use `dch`. `dch -i` creates new release.
+
+Gets installed into /usr/share/doc/<package>/changelog.Debian.gz
+
+### control
+
+Package metadata
+
+### rules
+
+Makefile
+
+Required targets:
+* `build`, `build-arch`, `build-indep` (config and compilation)
+* `binary`, `binary-arch`, binary-indep` (builds binary packages)
+* `clean` (cleans up the source directory)
+
+`debhelper` helps take care of commonalities
+
+#### Debhelper Makefile
+
+```
+# Uncomment this to turn on verbose mode .
+# export DH_VERBOSE =1
+
+build :
+	$( MAKE )
+	# docbook -to - man debian / packagename . sgml > packagename .1
+
+clean :
+	dh_testdir
+	dh_testroot
+	rm -f build - stamp configure - stamp
+	$( MAKE ) clean
+	dh_clean
+
+install : build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	# Add here commands to install the package into debian / packagename .
+	$( MAKE ) DESTDIR =$( CURDIR )/ debian / packagename install
+
+# Build architecture - independent files here .
+binary-indep : build install
+
+# Build architecture - dependent files here .
+binary-arch : build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+	dh_installdocs
+	dh_installexamples
+	dh_install
+	dh_installman
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary : binary - indep binary - arch
+. PHONY : build clean binary - indep binary - arch binary install configure
+```
+
+#### Debhelper add-ons
+
+* `cdbs` - help with common functionality
+* `dh` - even better and easier to customize http://joeyh.name/talks/debhelper/debhelper-slides.pdf
+
+USE `dh`!
+
+### Installing and testing
+
+`debi` - uses changes to know what to instal
+`debc` - lists content from changes
+`debdiff` - changes to compare or `.dsc`
+`lintian` - to check
+`dput` - uploads
+
+Manage debian archive with `reprepo` or `aptly`
+* https://wiki.debian.org/HowToSetupADebianRepository
+
+## Tools
+
+* `dch` - Can help manage `changelog`
+* `debuild -us -uc` - builds the package
+  * Or `dpkg-buildpackage`
+* `dpkg -i` - installs it
+* `dpkg-source`
+* `dh_make` - __debianizes__ the package for you.
+* `pbuilder` - helps isolate build environment for reproducible and safe builds.
+  * https://wiki.ubuntu.com/PbuilderHowto
+  * Alternatives: (`schroot`, `sbuild`). Tricky, https://help.ubuntu.com/community/SbuildLVMHowto.
+* `lintian` - checks packages
+* `piuparts` - checks .deb packages
+* `debhelper`
+
+## What is an "Upstream Package"
+
+I'm pretty sure, that's the actual source
+"the one from the software's original developers"
