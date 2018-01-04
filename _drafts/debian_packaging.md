@@ -70,6 +70,9 @@ debuild -i -us -uc -b
 Runs specific set of commands. Pass `--no-act` and `--verbose` to `dh` in
 debian/rules.
 
+
+![Packaging Workflow]({{site.baseurl}}/images/packaging/workflow.png "Packaging Workflow")
+
 ## Debian package contents
 
 Inside of `ar` directory
