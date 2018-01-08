@@ -27,43 +27,26 @@ case and if you have 2 services, only 1 really needs to be isolated.
   requirements, so you could end up in bad state that never gets fixed
 * If you generated a build artifact you'd have a ground truth and super quick
   installations
-  * - Development gets a little trickier. How do you make a new artifact from a
+  * \- Development gets a little trickier. How do you make a new artifact from a
     dev-branch
-  * + You can do all of your static asset compilation ahead of time
-  * - Our current setting configuration probably wouldn't play well with this
+  * \+ You can do all of your static asset compilation ahead of time
+  * \- Our current setting configuration probably wouldn't play well with this
 
-## [Debian New Maintainer's Guide](https://www.debian.org/doc/manuals/maint-guide/index.en.html)
 
-### 1) Getting Started
 
-Use [Guide for Debian Maintainers](https://www.debian.org/doc/manuals/debmake-doc/index.en.html)
+## Neat Scripts
 
-## [Guide for Debian Maintainers](https://www.debian.org/doc/manuals/debmake-doc/index.en.html)
-
-Use [Quick Reference](https://www.debian.org/doc/user-manuals#quick-reference),
-particularly [Debian Package
-Management](https://www.debian.org/doc/manuals/debian-reference/ch02.en.html).
-
-## [Quick Reference](https://www.debian.org/doc/user-manuals#quick-reference)
-
-* [Intro to Debian Packaging](https://wiki.debian.org/Packaging/Intro?action=show&redirect=IntroDebianPackaging)
-
-* [How to Package for Debian](https://wiki.debian.org/HowToPackageForDebian)
-* [Packaging Tutorial](https://www.debian.org/doc/manuals/packaging-tutorial/packaging-tutorial.en.pdf)
-* [Single Binary Package Building](http://tldp.org/HOWTO/html_single/Debian-Binary-Package-Building-HOWTO/)
-
-Neat way of building a package from source
+Building a package from source
 ```bash
 apt-get source foo
 cd foo-0.0.1
 sudo apt-get build-dep foo
 debuild -i -us -uc -b
+# or dpkg-buildpackage
+# Show the contents
+dpkg -c ../foo.0.0.1.deb
 ```
 
-## Python References:
-
-[Python Policy](https://www.debian.org/doc/packaging-manuals/python-policy/)
-[Python Library Style Guide](https://wiki.debian.org/Python/LibraryStyleGuide)
 
 ## `dh`
 
@@ -133,63 +116,14 @@ Required targets:
 * `binary`, `binary-arch`, binary-indep` (builds binary packages)
 * `clean` (cleans up the source directory)
 
-`debhelper` helps take care of commonalities
-
-#### Debhelper Makefile
-
-```
-# Uncomment this to turn on verbose mode .
-# export DH_VERBOSE =1
-
-build :
-	$( MAKE )
-	# docbook -to - man debian / packagename . sgml > packagename .1
-
-clean :
-	dh_testdir
-	dh_testroot
-	rm -f build - stamp configure - stamp
-	$( MAKE ) clean
-	dh_clean
-
-install : build
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
-	# Add here commands to install the package into debian / packagename .
-	$( MAKE ) DESTDIR =$( CURDIR )/ debian / packagename install
-
-# Build architecture - independent files here .
-binary-indep : build install
-
-# Build architecture - dependent files here .
-binary-arch : build install
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs
-	dh_installdocs
-	dh_installexamples
-	dh_install
-	dh_installman
-	dh_link
-	dh_strip
-	dh_compress
-	dh_fixperms
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-binary : binary - indep binary - arch
-. PHONY : build clean binary - indep binary - arch binary install configure
-```
+`debhelper` helps take care of commonalities. Here is an example
+[`debhelper` Makefile](https://gist.github.com/michael-christen/82b831c66abda13fa6f53b085604efa6).
 
 #### Debhelper add-ons
 
 * `cdbs` - help with common functionality
 * `dh` - even better and easier to customize http://joeyh.name/talks/debhelper/debhelper-slides.pdf
+
 
 USE `dh`!
 
@@ -219,7 +153,57 @@ Manage debian archive with `reprepo` or `aptly`
 * `piuparts` - checks .deb packages
 * `debhelper`
 
-## What is an "Upstream Package"
+## Open Questions
 
-I'm pretty sure, that's the actual source
-"the one from the software's original developers"
+- [ ] How does git-buildpackage fit in?
+
+
+## Resources
+
+### Official Debian
+
+* [Packaging Tutorial](https://www.debian.org/doc/manuals/packaging-tutorial/packaging-tutorial.en.pdf)
+* [Packaging](https://wiki.debian.org/Packaging)
+* [Guide for Debian Maintainers](https://www.debian.org/doc/manuals/debmake-doc/index.en.html)
+  * Recommended by [Debian New Maintainer's Guide](https://www.debian.org/doc/manuals/maint-guide/index.en.html)
+* [Quick Reference](https://www.debian.org/doc/user-manuals#quick-reference)
+* [Debian Package Management](https://www.debian.org/doc/manuals/debian-reference/ch02.en.html)
+* [Intro to Debian Packaging](https://wiki.debian.org/Packaging/Intro?action=show&redirect=IntroDebianPackaging)
+* [How to Package for Debian](https://wiki.debian.org/HowToPackageForDebian)
+* [Single Binary Package Building](http://tldp.org/HOWTO/html_single/Debian-Binary-Package-Building-HOWTO/)
+* [Debian Developer's Reference](https://www.debian.org/doc/manuals/developers-reference/)
+  * [Best Packaging Practices](https://www.debian.org/doc/manuals/developers-reference/best-pkging-practices.html)
+* [Debian Policy][]
+* [Debian Developers' Corner](https://www.debian.org/devel/)
+* [Django Packaging Draft](https://wiki.debian.org/DjangoPackagingDraft)
+
+### Articles
+
+#### Maintainer Scripts
+
+* [Maintainer Scripts](https://people.debian.org/~srivasta/MaintainerScripts.html)
+
+
+## Native Python Packages
+
+### Python References:
+
+* [Python Policy](https://www.debian.org/doc/packaging-manuals/python-policy/)
+* [Python Library Style Guide](https://wiki.debian.org/Python/LibraryStyleGuide)
+
+### Articles about python deployment
+
+* [Recipe for Django Deployment](https://brejoc.com/cup-recipe-for-django-python-deployment-or-how-to-make-your-admin-happy/)
+* [Nylas Deployment](https://www.nylas.com/blog/packaging-deploying-python/)
+
+### Tools for Creating Native Packages of Python Applications
+
+* [dh-virtualenv](https://github.com/spotify/dh-virtualenv)
+  * [make-deb](https://github.com/nylas/make-deb) creates `debian/` folder from setup.py
+  * [stdeb](https://pypi.python.org/pypi/stdeb/0.8.5) is an alternative
+* [fpm](https://github.com/jordansissel/fpm)
+  * [Graphite-api example](https://github.com/brutasse/graphite-api)
+
+<!-- References -->
+
+[Debian Policy]: https://www.debian.org/doc/debian-policy/ "Debian Policy"
