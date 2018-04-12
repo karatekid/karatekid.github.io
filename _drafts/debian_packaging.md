@@ -175,7 +175,7 @@ Manage debian archive with `reprepo` or `aptly`
   * [Best Packaging Practices](https://www.debian.org/doc/manuals/developers-reference/best-pkging-practices.html)
 * [Debian Policy][]
 * [Debian Developers' Corner](https://www.debian.org/devel/)
-* [Django Packaging Draft](https://wiki.debian.org/DjangoPackagingDraft)
+* [Filesystem Hierarchy Standard (FHS)](http://www.pathname.com/fhs/)
 
 ### Articles
 
@@ -190,6 +190,7 @@ Manage debian archive with `reprepo` or `aptly`
 
 * [Python Policy](https://www.debian.org/doc/packaging-manuals/python-policy/)
 * [Python Library Style Guide](https://wiki.debian.org/Python/LibraryStyleGuide)
+* [Django Packaging Draft](https://wiki.debian.org/DjangoPackagingDraft)
 
 ### Articles about python deployment
 
@@ -203,6 +204,11 @@ Manage debian archive with `reprepo` or `aptly`
   * [stdeb](https://pypi.python.org/pypi/stdeb/0.8.5) is an alternative
 * [fpm](https://github.com/jordansissel/fpm)
   * [Graphite-api example](https://github.com/brutasse/graphite-api)
+
+### Python Packaging & `virtualenv`
+
+* [Inside pip & virtualenv](http://pyvideo.org/pycon-us-2011/pycon-2011--reverse-engineering-ian-bicking--39-s.html),
+  [slides](http://carljm.github.io/pipvirtualenv-preso)
 
 <!-- References -->
 
