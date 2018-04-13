@@ -1,0 +1,19 @@
+digraph {
+    rankdir=LR;
+
+    "Client" -> "Parser" [label="HttpRequest"];
+
+    subgraph cluster_content_negotiation {
+        label="Content Negotiation";
+
+        "Parser";
+        "Renderer";
+    }
+
+    "Parser" -> "Allowance" [label="drf.Request"];
+    "Allowance" -> "View Function";
+    "View Function" -> "Renderer" [label="drf.Response"];
+    "Renderer" -> "Client" [label="HttpResponse"];
+
+    Allowance [shape="Mrecord" label="{<f0> Authentication | <f1> Permission | <f2> Throttle}"]
+}

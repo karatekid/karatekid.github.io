@@ -13,7 +13,8 @@ API endpoints in your django application.
 
 # High Level Architecture
 
-- Life of request graph
+{% include figure.html url='/assets/img/drf/architecture.png' caption='Life of a Request' %}
+
 - Each piece is removable from the rest (mostly)
 - Adds some niceties to keep code necessary at a minimum, ie) ViewSets
 
