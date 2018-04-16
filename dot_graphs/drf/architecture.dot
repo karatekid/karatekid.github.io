@@ -13,6 +13,10 @@ digraph {
     "Parser" -> "Allowance" [label="drf.Request"];
     "Allowance" -> "View Function";
     "View Function" -> "Renderer" [label="drf.Response"];
+    "View Function" -> "Serializer";
+    "Serializer" -> "Object Code";
+    "Object Code" -> "Serializer";
+    "Serializer" -> "View Function";
     "Renderer" -> "Client" [label="HttpResponse"];
 
     Allowance [shape="Mrecord" label="{<f0> Authentication | <f1> Permission | <f2> Throttle}"]
