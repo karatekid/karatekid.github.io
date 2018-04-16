@@ -1,9 +1,7 @@
 ---
-
 layout: post
 title: Django Rest Framework
 category: project
-
 ---
 
 > Django is Python's killer app and DRF is Django's killer app.
@@ -16,9 +14,6 @@ I'd highly reccomend checking out the [documentation][docs] and the
 This post simply records what I thought of DRF, and makes note of anything I
 thought was particularly interesting or worth writing down so that I could look
 back later.
-
-
-# High Level Architecture
 
 DRF does a great job of separating its modules, and as a result has a great
 architecture. The components are:
