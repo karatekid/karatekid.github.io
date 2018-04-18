@@ -22,18 +22,175 @@ RPC:
 - [`xmlrpc`][xmlrpc]
 
 Serialization in Python:
-- [`django-rest-framework`][django-rest-framework]
-- [`marshmallow`][marshmallow]
-- [`schematics`][schematics]
 - [`jsonschema`][pyjsonschema]
+- [`django` Forms](https://docs.djangoproject.com/en/2.0/ref/forms/)
+- [`django-rest-framework`][django-rest-framework]
+- [`schematics`][schematics]
+- [`marshmallow`][marshmallow]
 - [`cerberus`](https://github.com/pyeve/cerberus)
 - [`colander`](https://docs.pylonsproject.org/projects/colander/en/latest/)
 - [`schema`](https://github.com/keleshev/schema)
 - [`valideer`](https://github.com/podio/valideer)
+- [`validr`](https://github.com/guyskk/validr)
 - [`voluptuous`](https://github.com/alecthomas/voluptuous)
+
+Others:
+- [`GraphQL`](http://graphql.org/learn/schema/)
+- [XML Schema Definition](https://en.wikipedia.org/wiki/XML_Schema_(W3C\))
+- [XML Document Type Definition](https://www.xmlfiles.com/dtd/)
+- [`html schema`](http://schema.org)
 
 I'm on the lookout for incompatible representations between representations, as
 well as unsupported ones.
+
+## Scoreboard
+
+|Attributes           |`jsonschema`|`Django.Form`|
+|---------------------|------------|-------------|
+|Normalize            |            | Y(clean)    |
+|Error Message Change |            | Y           |
+|Heterogenous         |            | Y(Combo)    |
+|Relationships        |            | Y           |
+
+## JSONSchema
+
+Platform independent schema specification. Found [here][jsonschema], with some
+great documentation
+[here](https://spacetelescope.github.io/understanding-json-schema/).
+
+### Types:
+- string
+  - `minLength`
+  - `maxLength`
+  - `pattern`
+  - `format`: (date-time, email, hostname, ipv4, ipv6, uri)
+- integer & number
+  - `multipleOf`
+  - `minimum`
+  - `exclusiveMinimum`
+  - `maximum`
+  - `exclusiveMaximum`
+- object
+  - `properties`
+  - `additionalProperties`
+  - `required`
+  - `minProperties`
+  - `maxProperties`
+  - `dependencies` (when requirement of one fields depends on another)
+  - `patternProperties`
+- array
+  - `items`
+  - `additionalItems`
+  - `minItems`
+  - `maxItems`
+  - `uniqueness`
+- boolean
+- null
+
+### Generic Keywords:
+- `title`
+- `description`
+- `default`
+- `enum`
+
+### Control Keywords:
+- `allOf`
+- `anyOf`
+- `oneOf`
+- `not`
+
+- `$schema`: Specifies schema version
+- `definitions`: A collection of schemas that can be `$ref`d later
+- `$ref`: Reference definitions ie) `#/definitions/address`
+  - Can be used to extend schemas with `allOf`
+- `id`
+
+## Django.Form
+
+Forms are composed of
+[Fields](https://docs.djangoproject.com/en/2.0/ref/forms/fields/).
+Fields are represented in the UI as
+[widgets](https://docs.djangoproject.com/en/2.0/ref/forms/widgets/).
+
+Form operation:
+- `.is_valid()` to populate `.cleaned_data`
+  - `.cleaned_data` is a dictionary to the python types of the data that was
+    passed in
+- `.non_field_errors` and `.<name_of_field>.errors` are useful
+
+- `.is_bound` specifies whether it has data
+- `.clean()` does inter-field validation
+- `.is_valid()`
+- `.errrors`
+
+How do forms get rendered into html templates? A: Widgets.
+
+### Fields
+
+- `.clean(val)` returns the cleaned value or raises a `ValidationError`
+  - `.to_python()`
+  - `.validate()`
+  - `.run_validators()`
+
+Core arguments:
+- `required`
+- `label`
+- `label_suffix`
+- `initial` (only for display)
+- `widget`
+- `help_text`
+- `error_messages`: dictionary of overriden error messages
+- `validators`
+- `disabled` (basically read-only)
+
+Validates and cleans data (normalizes).
+
+`FormSet` allows many forms to show up at once.
+
+Do forms support nesting? A: kind of with `ForeignKey`, etc.
+
+Media can be bound to widgets.
+
+Types:
+- bool
+- char
+  - `max_length`, `min_length`, `strip`, `empty_value`
+- choice
+  - `choices`, can be a callable or a list of 2-tuples
+- TypedChoice, sub-class of choice
+  - `coerce`, `empty_value`
+- Date
+  - `input_formats`
+- DateTime
+  - `input_formats`
+- Decimal
+  - `min_value`, `max_value`, `max_digits`, `decimal_places`
+- Duration
+- Email
+  - `min/max_length`
+- File
+  - `max_length`, `allow_empty_file`
+- FilePathField
+  - etc
+- Float
+- Image
+- int
+- genericIP
+- MultipleChoice/Typed
+- NullBoolean
+- Regex
+- Slug
+- URL
+- UUID
+
+- Combo
+- MultiValue (Maybe kind of nesting?)
+- SplitDateTime
+- ModelChoiceField
+- ModelMultipleChoiceField
+
+## Schematics
+
 
 ## Field Attributes
 
@@ -122,14 +279,19 @@ All serializers have these in common: ...
 
 # Acknowledgements
 
-- Thanks to [awesome-python](https://github.com/vinta/awesome-python) for
-  helping me find some interesting serialization frameworks.
+- Thanks to [awesome-python](https://awesome-python.com/) for helping me find
+  some interesting serialization frameworks.
+
+# Other Resources
+- [Comparison of GraphQL, JSONSchema, JSON-LD](https://react-etc.net/entry/graphql-json-ld-and-json-schema-formats-explained)
+- [Hackernews Thread](https://news.ycombinator.com/item?id=15629253)
+- [Comparison of Serialization Formats](https://www.sitepoint.com/data-serialization-comparison-json-yaml-bson-messagepack/)
 
 [django-rest-framework]: http://www.django-rest-framework.org/ "Django Rest Framework"
 [jsonschema]: http://json-schema.org/ "JSONSchema"
 [marshmallow]: https://github.com/marshmallow-code/marshmallow "Marshmallow"
 [protobuf]: https://developers.google.com/protocol-buffers/ "Protocol Buffers"
-[pyjsonschema]: https://github.com/vinta/awesome-python "Python JSONSchema"
+[pyjsonschema]: https://github.com/Julian/jsonschema "Python JSONSchema"
 [schematics]: https://github.com/schematics/schematics "Schematics"
 [thrift]: https://thrift.apache.org/ "Apache Thrift"
 [xmlrpc]: https://docs.python.org/3/library/xmlrpc.html "XMLRPC"
