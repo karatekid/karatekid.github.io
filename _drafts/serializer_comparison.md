@@ -42,12 +42,15 @@ Others:
 
 Related:
 - [`attrs`](https://github.com/python-attrs/attrs)
-- Python Data Classes
+- [Python Data Classes](https://www.python.org/dev/peps/pep-0557/)
+  - [Type Hints](https://www.python.org/dev/peps/pep-0484/)
 
 I'm on the lookout for incompatible representations between representations, as
 well as unsupported ones.
 
 ## Scoreboard
+
+### Attributes
 
 |Attributes           |`jsonschema`|`Django.Form`|`drf.Serializer`|
 |---------------------|------------|-------------|----------------|
@@ -58,7 +61,7 @@ well as unsupported ones.
 |Returns Object       |            | N           | Y              |
 |Custom Validators    |            | Y           | Y              |
 
-## Type Args
+### Type Args
 
 |Args                 |`jsonschema`|`Django.Form`  |`drf.Serializer`|
 |---------------------|------------|-------------  |----------------|
@@ -73,62 +76,72 @@ well as unsupported ones.
 |ui info              |            | widget        |                |
 |read only            |            | disabled      |                |
 
-## Type Mapping
+### Type Mapping
 
 [Django.Form Field](https://docs.djangoproject.com/en/2.0/ref/forms/fields)
 [DjangoRestFramework Field](http://www.django-rest-framework.org/api-guide/fields/)
+[Schematics Type](http://schematics.readthedocs.io/en/latest/api/types.html)
+[Marshmallow Field](https://marshmallow.readthedocs.io/en/latest/api_reference.html#marshmallow.fields.Field)
+[Cerberus Types](http://docs.python-cerberus.org/en/stable/validation-rules.html)
+[Colander Types](https://docs.pylonsproject.org/projects/colander/en/latest/api.html#types)
+
+[Proto3](https://developers.google.com/protocol-buffers/docs/proto3)
 
 
-|Type         |`jsonschema`|`Django.Form`             |`drf.Serializer`       | schematics            | marshmallow |
-|-------------|------------|--------------------------|----------------       | ----------            |-------------|
-|null         | null       |                          |                       |                       |
-|boolean      | bool       | BooleanField             | BooleanField          | BooleanType           | Bool        |
-|             |            | NullBooleanField         | NullBooleanField      |
-|integer      | integer    | IntegerField             | IntegerField          | IntType               | Int         |
-|             |            |                          |                       | LongType              |
-|number       | number     | DecimalField             | DecimalField          | DecimalType           |
-|             |            |                          |                       | NumberType            |
-|             |            | FloatField               | FloatField            | FloatType             |
-|string       | string     | CharField                | CharField             | StringType            | Str         |
-|             | pattern    | RegexField               | RegexField            |
-|             |            | SlugField                | SlugField             |
-|             |            | URLField                 | URLField              | URLType               | URL/Url     |
-|             |            | UUIDField                | UUIDField             | UUIDType              |
-|             |            | EmailField               | EmailField            | EmailType             | Email       |
-|             |            | FilePathField            | FilePathField         |
-|             |            | GenericIPAddressField    | IPAddressField        | IPAddressType         |
-|             |            |                          | JSONField             |
-|             |            |                          |                       | IPv4Type              |
-|             |            |                          |                       | IPv6Type              |
-|             |            |                          |                       | MACAddressType        |
-|             |            |                          |                       | HashType              |
-|             |            |                          |                       | MD5Type               |
-|             |            |                          |                       | SHA1Type              |
-|             |            |                          |                       | GeoPointType          |
-|             |            |                          |                       | MultilingualStringType|
-|datetime     |            | DateTimeField            | DateTimeField         | DateTimeType          | DateTime      |
-|             |            |                          |                       | UTCDateTimeType       |
-|             |            |                          |                       |                       | LocalDateTime |
-|             |            | DurationField            | DurationField         |                       | TimeDelta |
-|             |            | SplitDateTimeField       |                       |
-|             |            | DateField                | DateField             | DateType              | Date      |
-|             |            | TimeField                | TimeField             | TimestampType         | Time      |
-|Media        |            | FileField                | FileField             |
-|             |            | ImageField               | ImageField            |
-|enum         | enum       | ChoiceField              | ChoiceField           |
-|             |            | TypedChoiceField         |                       |
-|             |            | MultipleChoiceField      | MultipleChoiceField   |
-|             |            | TypedMultipleChoiceField |                       |
-|mix          | allOf      | ComboField               |                       |
-|poly         | anyOf,oneOf|                          |                       | PolyModelType         |
-|tuple        |            | MultiValueField          |                       |
-|array        | array      |                          | ListField             | ListType              | List      |
-|object       | object     |                          | DictField             | DictType              | Dict      |
-|reflection   |            | ModelChoiceField         | ModelField            | ModelType             | Nested    |
-|             |            | ModelMultipleChoiceField |                       |
-|misc         |            |                          | HiddenField           |
-|             |            |                          | SerializerMethodField |
-|             |            |                          | RelatedField          |
+|Type         |`jsonschema`|`Django.Form`             |`drf.Serializer`       | schematics            | marshmallow     |
+|-------------|------------|--------------------------|-----------------------|-----------------------|-----------------|
+|null         | null       |                          |                       |                       |                 |
+|boolean      | bool       | BooleanField             | BooleanField          | BooleanType           | BooleanBool     |
+|             |            | NullBooleanField         | NullBooleanField      |                       |                 |
+|integer      | integer    | IntegerField             | IntegerField          | IntType               | Integer/Int     |
+|             |            |                          |                       | LongType              |                 |
+|number       | number     | DecimalField             | DecimalField          | DecimalType           | Decimal         |
+|             |            |                          |                       | NumberType            | Number          |
+|             |            | FloatField               | FloatField            | FloatType             | Float           |
+|string       | string     | CharField                | CharField             | StringType            | String/Str      |
+|             | pattern    | RegexField               | RegexField            |                       |                 |
+|             |            | SlugField                | SlugField             |                       |                 |
+|             |            | URLField                 | URLField              | URLType               | URL/Url         |
+|             |            | UUIDField                | UUIDField             | UUIDType              | UUID            |
+|             |            | EmailField               | EmailField            | EmailType             | Email           |
+|             |            | FilePathField            | FilePathField         |                       |                 |
+|             |            | GenericIPAddressField    | IPAddressField        | IPAddressType         |                 |
+|             |            |                          | JSONField             |                       |                 |
+|             |            |                          |                       | IPv4Type              |                 |
+|             |            |                          |                       | IPv6Type              |                 |
+|             |            |                          |                       | MACAddressType        |                 |
+|             |            |                          |                       | HashType              |                 |
+|             |            |                          |                       | MD5Type               |                 |
+|             |            |                          |                       | SHA1Type              |                 |
+|             |            |                          |                       | GeoPointType          |                 |
+|             |            |                          |                       | MultilingualStringType|                 |
+|datetime     |            | DateTimeField            | DateTimeField         | DateTimeType          | DateTime        |
+|             |            |                          |                       | UTCDateTimeType       |                 |
+|             |            |                          |                       |                       | LocalDateTime   |
+|             |            | DurationField            | DurationField         |                       | TimeDelta       |
+|             |            | SplitDateTimeField       |                       |                       |                 |
+|             |            | DateField                | DateField             | DateType              | Date            |
+|             |            | TimeField                | TimeField             | TimestampType         | Time            |
+|Media        |            | FileField                | FileField             |                       |                 |
+|             |            | ImageField               | ImageField            |                       |                 |
+|enum         | enum       | ChoiceField              | ChoiceField           |                       |                 |
+|             |            | TypedChoiceField         |                       |                       |                 |
+|             |            | MultipleChoiceField      | MultipleChoiceField   |                       |                 |
+|             |            | TypedMultipleChoiceField |                       |                       |                 |
+|mix          | allOf      | ComboField               |                       |                       |                 |
+|poly         | anyOf,oneOf|                          |                       | PolyModelType         |                 |
+|tuple        |            | MultiValueField          |                       |                       |                 |
+|array        | array      |                          | ListField             | ListType              | List            |
+|object       | object     |                          | DictField             | DictType              | Dict            |
+|reflection   |            | ModelChoiceField         | ModelField            | ModelType             | Nested          |
+|             |            | ModelMultipleChoiceField |                       |                       |                 |
+|reference    |            |                          |                       |                       | FormattedString |
+|             |            |                          |                       |                       | Method          |
+|             |            |                          |                       |                       | Function        |
+|misc         |            |                          | HiddenField           |                       |                 |
+|             |            |                          | SerializerMethodField |                       |                 |
+|             |            |                          | RelatedField          |                       |                 |
+|             |            |                          |                       |                       | Constant        |
 
 
 ## JSONSchema
