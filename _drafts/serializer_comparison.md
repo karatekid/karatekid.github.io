@@ -40,17 +40,96 @@ Others:
 - [XML Document Type Definition](https://www.xmlfiles.com/dtd/)
 - [`html schema`](http://schema.org)
 
+Related:
+- [`attrs`](https://github.com/python-attrs/attrs)
+- Python Data Classes
+
 I'm on the lookout for incompatible representations between representations, as
 well as unsupported ones.
 
 ## Scoreboard
 
-|Attributes           |`jsonschema`|`Django.Form`|
-|---------------------|------------|-------------|
-|Normalize            |            | Y(clean)    |
-|Error Message Change |            | Y           |
-|Heterogenous         |            | Y(Combo)    |
-|Relationships        |            | Y           |
+|Attributes           |`jsonschema`|`Django.Form`|`drf.Serializer`|
+|---------------------|------------|-------------|----------------|
+|Normalize            |            | Y(clean)    |                |
+|Error Message Change |            | Y           |                |
+|Heterogenous         |            | Y(Combo)    |                |
+|Relationships        |            | Y           |                |
+|Returns Object       |            | N           | Y              |
+|Custom Validators    |            | Y           | Y              |
+
+## Type Args
+
+|Args                 |`jsonschema`|`Django.Form`  |`drf.Serializer`|
+|---------------------|------------|-------------  |----------------|
+|required             |required    | required      |                |
+|title                |title       | label         |                |
+|                     |            | label_suffix  |                |
+|description          |description | help_text     |                |
+|default              |default     |               |                |
+|                     |            | initial       |                |
+|error messages       |            | error_messages|                |
+|validators           |            | validators    |                |
+|ui info              |            | widget        |                |
+|read only            |            | disabled      |                |
+
+## Type Mapping
+
+[Django.Form Field](https://docs.djangoproject.com/en/2.0/ref/forms/fields)
+[DjangoRestFramework Field](http://www.django-rest-framework.org/api-guide/fields/)
+
+
+|Type         |`jsonschema`|`Django.Form`             |`drf.Serializer`       | schematics            | marshmallow |
+|-------------|------------|--------------------------|----------------       | ----------            |-------------|
+|null         | null       |                          |                       |                       |
+|boolean      | bool       | BooleanField             | BooleanField          | BooleanType           | Bool        |
+|             |            | NullBooleanField         | NullBooleanField      |
+|integer      | integer    | IntegerField             | IntegerField          | IntType               | Int         |
+|             |            |                          |                       | LongType              |
+|number       | number     | DecimalField             | DecimalField          | DecimalType           |
+|             |            |                          |                       | NumberType            |
+|             |            | FloatField               | FloatField            | FloatType             |
+|string       | string     | CharField                | CharField             | StringType            | Str         |
+|             | pattern    | RegexField               | RegexField            |
+|             |            | SlugField                | SlugField             |
+|             |            | URLField                 | URLField              | URLType               | URL/Url     |
+|             |            | UUIDField                | UUIDField             | UUIDType              |
+|             |            | EmailField               | EmailField            | EmailType             | Email       |
+|             |            | FilePathField            | FilePathField         |
+|             |            | GenericIPAddressField    | IPAddressField        | IPAddressType         |
+|             |            |                          | JSONField             |
+|             |            |                          |                       | IPv4Type              |
+|             |            |                          |                       | IPv6Type              |
+|             |            |                          |                       | MACAddressType        |
+|             |            |                          |                       | HashType              |
+|             |            |                          |                       | MD5Type               |
+|             |            |                          |                       | SHA1Type              |
+|             |            |                          |                       | GeoPointType          |
+|             |            |                          |                       | MultilingualStringType|
+|datetime     |            | DateTimeField            | DateTimeField         | DateTimeType          | DateTime      |
+|             |            |                          |                       | UTCDateTimeType       |
+|             |            |                          |                       |                       | LocalDateTime |
+|             |            | DurationField            | DurationField         |                       | TimeDelta |
+|             |            | SplitDateTimeField       |                       |
+|             |            | DateField                | DateField             | DateType              | Date      |
+|             |            | TimeField                | TimeField             | TimestampType         | Time      |
+|Media        |            | FileField                | FileField             |
+|             |            | ImageField               | ImageField            |
+|enum         | enum       | ChoiceField              | ChoiceField           |
+|             |            | TypedChoiceField         |                       |
+|             |            | MultipleChoiceField      | MultipleChoiceField   |
+|             |            | TypedMultipleChoiceField |                       |
+|mix          | allOf      | ComboField               |                       |
+|poly         | anyOf,oneOf|                          |                       | PolyModelType         |
+|tuple        |            | MultiValueField          |                       |
+|array        | array      |                          | ListField             | ListType              | List      |
+|object       | object     |                          | DictField             | DictType              | Dict      |
+|reflection   |            | ModelChoiceField         | ModelField            | ModelType             | Nested    |
+|             |            | ModelMultipleChoiceField |                       |
+|misc         |            |                          | HiddenField           |
+|             |            |                          | SerializerMethodField |
+|             |            |                          | RelatedField          |
+
 
 ## JSONSchema
 
@@ -189,12 +268,77 @@ Types:
 - ModelChoiceField
 - ModelMultipleChoiceField
 
-## Schematics
 
+## DRF
 
-## Field Attributes
+Serializer:
 
-### DRF
+Workflow:
+- Intialization mixes instance and data
+  - can be `partial`
+  - `many` are allowed
+- `.is_valid()`
+  - `.validate()`
+  - `.validate_<field>()` methods are called
+- `.errors` is populated
+- `.save()` calls `.create()` or `.update()`
+- `.to_representation()` serializes
+- `.to_internal_value()` deserializes
+
+Fields:
+
+Core arguments:
+- `read_only`
+- `write_only`
+- `required`
+- `default`
+- `allow_null`
+- `source`
+- `validators`
+- `error_messages`
+- `label`
+- `help_text`
+- `initial`
+- `style`
+  - `input_type`, `base_template`, but could add anything
+
+Types:
+- bool
+- nullbool
+- char
+- email
+- regex
+- slug
+- url
+- uuid
+- filepath
+- ipaddress
+- integer
+- float
+- decimal
+- datetime
+- date
+- time
+- duration
+- choice
+- multiplechoice
+- file
+- image
+- list
+- dict
+- hstore
+- json
+- readonly
+- hidden
+- model
+- serializermethod
+- relatedfields
+
+`.to_representation()`
+`.to_internal_value()`
+
+The really neat thing is that a `Serializer` is a `Field`
+Ends up at UI with the help of a `Renderer`.
 
 # Serializers
 
@@ -202,6 +346,51 @@ Note: I should be able to use this mostly cut/paste for a blog entry.
 
 This file will keep most of the notes on the attributes of the various
 serializers, and make note of the similarities, differences, etc.
+
+## Schematics
+
+Models have types
+
+Core Args:
+- required
+- default
+- serialized_name
+- choices
+- validators
+- deserialize_from
+- export_level
+- serialize_when_none
+- messages
+- metadata
+
+Types:
+- uuid
+- string
+- multilingualstring
+- number
+- int
+- long
+- float
+- decimal
+- md5
+- sha1
+- bool
+- geopoint
+- date
+- datetime
+- utcdatetime
+- timestamp
+- model
+- list
+- dict
+- polymodel
+- ipadress
+- ipv4
+- ipv6
+- macaddress
+- url
+- email
+
 
 ## Which Serializers are we looking at?
 
