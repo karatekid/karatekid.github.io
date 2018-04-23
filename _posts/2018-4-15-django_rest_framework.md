@@ -91,5 +91,14 @@ A future post could go more in depth into:
 - Analogies with Django Forms
 - Comparison to other `Serialization` frameworks
 
+### Popular Extensions
+
+- Creation
+  - [Bulk](https://github.com/miki725/django-rest-framework-bulk)
+  - [Multiple Models](https://github.com/MattBroach/DjangoRestMultipleModels)
+- Router
+  - [Nested](https://github.com/alanjds/drf-nested-routers)
+  - [A lot of 'em](https://chibisov.github.io/drf-extensions/docs/)
+
 [docs]: http://www.django-rest-framework.org/ "Django Rest Framework Docs"
 [tutorial]: http://www.django-rest-framework.org/tutorial/quickstart/ "Django Rest Framework Tutorial"
